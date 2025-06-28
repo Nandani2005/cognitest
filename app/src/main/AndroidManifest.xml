@@ -12,8 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
-            android:name=".testPageActivity"
+            android:name=".testPage"
             android:exported="false" />
+        <activity
+            android:name=".progress"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
