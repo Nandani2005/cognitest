@@ -9,6 +9,16 @@
         android:layout_width="298dp"
         android:layout_height="321dp"
         android:layout_gravity="center"
-        android:layout_margin="100dp"
+        android:layout_marginTop="100dp"
         android:src="@drawable/logopage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="COGNITEST"
+        android:textSize="50dp"
+        android:textColor="#9C27B0"
+        android:gravity="center"
+        android:textFontWeight="700"
+        />
 </LinearLayout>
