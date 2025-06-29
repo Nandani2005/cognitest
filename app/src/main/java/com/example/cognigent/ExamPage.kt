@@ -2,6 +2,7 @@ package com.example.cognigent
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -39,6 +40,24 @@ class ExamPage : AppCompatActivity() {
           val rev= Intent(this, ReviewActivity::class.java)
             startActivity(rev)
         }
+        val count = findViewById<TextView>(R.id.timer)
+        val timer = object : CountDownTimer(1800000, 1000) {
+            val timer = object : CountDownTimer(30 * 60 * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val minutes = (millisUntilFinished / 1000) / 60
+                    val seconds = (millisUntilFinished / 1000) % 60
+                    val timeFormatted = String.format("%02d:%02d", minutes, seconds)
+                    count.text = timeFormatted
+                }
+
+                override fun onFinish() {
+                    count.text = "00:00"
+                    val intent = Intent(this@ExamPage, ReviewActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+        timer.start()
 
         // Initialize UI components
         questionTextView = findViewById(R.id.questionTextView)

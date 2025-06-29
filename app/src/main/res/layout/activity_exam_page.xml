@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+
     android:orientation="vertical"
     tools:context=".ExamPage">
 
@@ -17,11 +18,13 @@
         />
 
     <TextView
+        android:id="@+id/timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Time left"
+        android:text="Time Left 30:00 min"
         android:textSize="20dp"
-        android:layout_gravity="left"/>
+        android:padding="10dp"
+        android:gravity="right"/>
 
 
     <TextView
@@ -29,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/drawbutons"
         android:text="Your Question Will Appear Here"
         android:textSize="24sp"
@@ -51,8 +54,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Option A"
+            android:textColor="#fff"
             android:textSize="18sp"
-            android:padding="8dp" />
+            android:padding="15dp" />
 
         <RadioButton
             android:id="@+id/optionB"
@@ -60,7 +64,7 @@
             android:layout_height="wrap_content"
             android:text="Option B"
             android:textSize="18sp"
-            android:padding="8dp" />
+            android:padding="15dp" />
 
         <RadioButton
             android:id="@+id/optionC"
@@ -68,7 +72,7 @@
             android:layout_height="wrap_content"
             android:text="Option C"
             android:textSize="18sp"
-            android:padding="8dp" />
+            android:padding="15dp" />
 
         <RadioButton
             android:id="@+id/optionD"
@@ -76,7 +80,7 @@
             android:layout_height="wrap_content"
             android:text="Option D"
             android:textSize="18sp"
-            android:padding="8dp" />
+            android:padding="15dp" />
 
     </RadioGroup>
 <LinearLayout
@@ -89,6 +93,7 @@
     <Button
         android:id="@+id/previousButton"
         android:layout_width="0dp"
+        android:background="@drawable/drawbutons"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Previous" />
@@ -101,6 +106,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:background="@drawable/drawbutons"
         android:layout_alignParentBottom="true"
         android:text="preview" />
     <LinearLayout
@@ -112,7 +118,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-
+        android:background="@drawable/drawbutons"
         android:text="Next" />
 </LinearLayout>
 
