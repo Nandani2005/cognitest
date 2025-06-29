@@ -1,5 +1,6 @@
 package com.example.cognigent
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioButton
@@ -9,13 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 // Define a data class to hold question data
-data class Question(
-    val questionText: String,
-    val options: List<String>,
-    val correctAnswerIndex: Int // Index of the correct answer in the 'options' list (0-based)
-)
 
-class examPage : AppCompatActivity() {
+class ExamPage : AppCompatActivity() {
 
     private lateinit var questionTextView: TextView
     private lateinit var optionsRadioGroup: RadioGroup
@@ -38,6 +34,11 @@ class examPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_exam_page)
+        val prev= findViewById<Button>(R.id.preview)
+        prev.setOnClickListener {
+          val rev= Intent(this, ReviewActivity::class.java)
+            startActivity(rev)
+        }
 
         // Initialize UI components
         questionTextView = findViewById(R.id.questionTextView)
@@ -116,6 +117,10 @@ class examPage : AppCompatActivity() {
             if (currentQuestionIndex < examQuestions.size - 1) {
                 currentQuestionIndex++
                 displayQuestion()
+                optionA.isChecked = false
+                optionB.isChecked = false
+                optionC.isChecked = false
+                optionD.isChecked = false
             }
         }
 
@@ -171,4 +176,10 @@ class examPage : AppCompatActivity() {
         // Disable next button if on the last question
         nextButton.isEnabled = currentQuestionIndex < examQuestions.size - 1
     }
+
+    data class Question(
+        val questionText: String,
+        val options: List<String>,
+        val correctAnswerIndex: Int // Index of the correct answer in the 'options' list (0-based)
+    )
 }

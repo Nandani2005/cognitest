@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".ExamPage">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="exam"
+        android:textSize="20dp"
+        android:padding="10dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Time left"
+        android:textSize="20dp"
+        android:layout_gravity="left"/>
+
 
     <TextView
         android:id="@+id/questionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/drawbutons"
         android:text="Your Question Will Appear Here"
         android:textSize="24sp"
@@ -22,7 +40,8 @@
     <RadioGroup
         android:id="@+id/optionsRadioGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_below="@id/questionTextView"
         android:layout_marginTop="40dp"
         android:orientation="vertical">
@@ -60,22 +79,41 @@
             android:padding="8dp" />
 
     </RadioGroup>
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:layout_gravity="bottom"
+    android:orientation="horizontal"
+    >
     <Button
         android:id="@+id/previousButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Previous" />
+<LinearLayout
+    android:layout_width="40dp"
+    android:layout_height="match_parent"/>
+
+    <Button
+        android:id="@+id/preview"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginEnd="8dp"
-        android:text="Previous" />
+        android:text="preview" />
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="match_parent"/>
 
     <Button
         android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="Next" />
 
-</RelativeLayout>
+        android:text="Next" />
+</LinearLayout>
+
+</LinearLayout>

@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
-            android:name=".examPage"
+            android:name=".ReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamPage"
             android:exported="false" />
         <activity
             android:name=".profile"

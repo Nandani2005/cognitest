@@ -18,6 +18,7 @@ class profile : AppCompatActivity() {
         val sol = findViewById<Button>(R.id.solution)
         val prof=findViewById<Button>(R.id.profile)
 
+
         test.setOnClickListener {
             val tr1= Intent(this,testPage::class.java)
             startActivity(tr1)
@@ -38,6 +39,12 @@ class profile : AppCompatActivity() {
             startActivity(tr4)
             finish()
         }
+        val start = findViewById<Button>(R.id.testStart)
+        start.setOnClickListener {
+            val intent = Intent(this@profile, ExamPage::class.java)
+            startActivity(intent)
+        }
+
 
     }
 }
