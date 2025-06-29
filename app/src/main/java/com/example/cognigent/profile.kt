@@ -1,4 +1,5 @@
 package com.example.cognigent
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -7,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class progress : AppCompatActivity() {
+class profile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.progressactivity)
+        setContentView(R.layout.activity_profile)
 
         val test=findViewById<Button>(R.id.tests)
         val pBtn=findViewById<Button>(R.id.progress)
@@ -34,5 +35,6 @@ class progress : AppCompatActivity() {
             val tr4= Intent(this,profile::class.java)
             startActivity(tr4)
         }
+
     }
 }

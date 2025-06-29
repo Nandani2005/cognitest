@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="#fff"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    tools:context=".profile">
     <include layout="@layout/headerfile"/>
     <ScrollView
         android:layout_width="match_parent"
@@ -14,12 +16,14 @@
             android:layout_width="match_parent"
 
             android:layout_height="match_parent">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="30dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:text="profile"/>
 
         </LinearLayout>
     </ScrollView>
     <include layout="@layout/navigationbtns"/>
+
 </LinearLayout>

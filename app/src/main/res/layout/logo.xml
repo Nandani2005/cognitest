@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:background="#fff"
     android:layout_height="match_parent">
 
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-android:src="@drawable/logopage"
-    android:layout_gravity="center"/>
+    <ImageView
+        android:layout_width="298dp"
+        android:layout_height="321dp"
+        android:layout_gravity="center"
+        android:layout_margin="100dp"
+        android:src="@drawable/logopage" />
 </LinearLayout>

@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             delay(1500) // 5000 milliseconds = 5 seconds
             // Move to next activity
-            val trans= Intent(this@MainActivity, MainActivity::class.java)
+            val trans= Intent(this@MainActivity, progress::class.java)
             startActivity(trans)
             finish()
         }
