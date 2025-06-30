@@ -42,7 +42,6 @@ class ExamPage : AppCompatActivity() {
         }
         val count = findViewById<TextView>(R.id.timer)
         val timer = object : CountDownTimer(1800000, 1000) {
-            val timer = object : CountDownTimer(30 * 60 * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val minutes = (millisUntilFinished / 1000) / 60
                     val seconds = (millisUntilFinished / 1000) % 60
@@ -56,7 +55,6 @@ class ExamPage : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-        }
         timer.start()
 
         // Initialize UI components
