@@ -1,6 +1,8 @@
 package com.example.cognigent
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,10 +13,17 @@ class progress : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_progress)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
+            startActivity(Intent(this, progress::class.java))
         }
+
+        findViewById<ImageView>(R.id.nav_home).setOnClickListener {
+            startActivity(Intent(this, homepage::class.java))
+        }
+
+        findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
+            startActivity(Intent(this, profile::class.java))
+        }
+
     }
 }

@@ -74,6 +74,13 @@ class profile : AppCompatActivity() {
             intent.putExtra("course", prefs.getString("course", ""))
             startActivity(intent)
         }
+        findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
+            startActivity(Intent(this, progress::class.java))
+        }
+
+        findViewById<ImageView>(R.id.nav_result).setOnClickListener {
+            startActivity(Intent(this, profile::class.java))
+        }
     }
 
     private fun loadProfileData() {
