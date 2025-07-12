@@ -49,7 +49,7 @@
                 android:layout_marginTop="70dp"
                 android:layout_marginStart="5dp"
                 android:textSize="30sp"
-
+                android:text="sriyanshi"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 
