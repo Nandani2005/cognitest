@@ -1,3 +1,7 @@
+package com.example.cognigent
+
+import MCQDatabaseHelper
+import QuestionModel
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
