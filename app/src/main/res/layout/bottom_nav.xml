@@ -23,9 +23,8 @@
         <ImageView
             android:id="@+id/nav_home"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-
             android:contentDescription="Home"
             android:padding="10dp"
             android:src="@drawable/home_ic" />
@@ -33,7 +32,7 @@
         <ImageView
             android:id="@+id/nav_progress"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:contentDescription="Progress"
             android:padding="10dp"
@@ -42,17 +41,17 @@
         <ImageView
             android:id="@+id/nav_result"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:contentDescription="Result"
             android:padding="10dp"
 
-            android:src="@drawable/img" />
+            android:src="@drawable/notificationimg" />
 
         <ImageView
             android:id="@+id/nav_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:contentDescription="Profile"
             android:padding="10dp"
