@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#fff"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_width="298dp"
-        android:layout_height="321dp"
+        android:id="@+id/imageView"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
+        android:contentDescription="Test_Pilot_Logo"
         android:src="@drawable/logopage" />
 
+
+
     <TextView
+        android:id="@+id/prjname"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="COGNITEST"
-        android:textSize="50dp"
-        android:textColor="#9C27B0"
+        android:layout_height="101dp"
+        android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:textFontWeight="700"
-        />
+        android:text="COGNITEST"
+        android:textColor="#B40D65"
+        android:textFontWeight="600"
+        android:textSize="50sp" />
+
+
 </LinearLayout>

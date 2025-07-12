@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background image -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg4" />
+
+    <!-- Transparent black overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000" />
+
+    <!-- Foreground content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Welcome Section -->
+        <LinearLayout
+            android:id="@+id/welcomeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:background="@drawable/wlcmbg">
+
+            <TextView
+                android:id="@+id/wlcm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:padding="20dp"
+                android:text="WELCOME"
+
+                android:textSize="30sp"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:layout_marginStart="5dp"
+                android:textSize="30sp"
+
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:text="Choose Subject to give test"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
+
+        <!-- BCA Subjects -->
+        <ScrollView
+            android:id="@+id/scrollSectionBCA"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+           >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- First Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/c"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/curve"
+                        android:text="C Programming"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+
+                    <Button
+                        android:id="@+id/cpp"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="C++ Programming"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="6.5dp" />
+                </LinearLayout>
+
+                <!-- Second Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/dsa"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/curve"
+                        android:text="Data Structures"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+
+                    <Button
+                        android:id="@+id/java"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="Java Programming"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:minLines="2"
+                        android:padding="4dp" />
+                </LinearLayout>
+
+                <!-- Third Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/dbms"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/curve"
+                        android:text="DBMS"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+
+                    <Button
+                        android:id="@+id/html"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="HTML/CSS"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <!-- MCA Subjects -->
+        <ScrollView
+            android:id="@+id/scrollSectionMCA"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- First row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/javamca"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/curve"
+                        android:text="Java"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+
+                    <Button
+                        android:id="@+id/python"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="Python"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+                </LinearLayout>
+
+                <!-- Second row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/oprsys"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/curve"
+                        android:text="Operating System"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="4dp" />
+
+                    <Button
+                        android:id="@+id/networks"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="Networks"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+                </LinearLayout>
+
+                <!-- Third row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <Button
+                        android:id="@+id/ml"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/curve"
+                        android:text="Machine Learning"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+
+                    <Button
+                        android:id="@+id/mis"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="MIS"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:padding="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <!--BBA Subjects -->
+        <ScrollView
+            android:id="@+id/scrollSectionBBA"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+           android:visibility="gone"
+         >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center_horizontal"
+                >
+
+                <!-- First Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/buscom"
+                        android:layout_width="0dp"
+                        android:layout_height="122dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Business\ncommunication"
+                        android:textSize="16sp"
+
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                    <Button
+                        android:id="@+id/marketing"
+                        android:layout_width="0dp"
+                        android:layout_height="122dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Marketing\n"
+                        android:textSize="18sp"
+
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+
+                <!-- Second Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/finance"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Finance"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <Button
+                        android:id="@+id/hres"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/curve"
+                        android:text="Human Resource"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:padding="6dp"
+                        android:minLines="2"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+
+                <!-- Third Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/eco"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Economics"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <Button
+                        android:id="@+id/acc"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Accounting"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+
+        <!--MBA Subjects -->
+        <ScrollView
+            android:id="@+id/scrollSectionMBA"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+        >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:gravity="center_horizontal">
+
+                <!-- First Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/maneco"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Managerial\nEconomics"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <Button
+                        android:id="@+id/hr"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Human\nResource"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+
+                <!-- Second Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/blaw"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Business\nLaw"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <Button
+                        android:id="@+id/bst"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Business\nStatistics"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+
+                <!-- Third Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/busana"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Business\nAnalytics"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <Button
+                        android:id="@+id/fin"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/curve"
+                        android:text="Finance\n"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+
+        <include
+            android:id="@+id/bottomNavigation"
+            layout="@layout/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="55dp" />
+    </LinearLayout>
+</FrameLayout>

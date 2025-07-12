@@ -2,32 +2,50 @@ package com.example.cognigent
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import com.example.cognigent.ui.theme.CognigentTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var logo: ImageView
+    private lateinit var appName: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.logo)
-        lifecycleScope.launch {
-            delay(1500) // 5000 milliseconds = 5 seconds
-            // Move to next activity
-            val trans= Intent(this@MainActivity, testPage::class.java)
-            startActivity(trans)
+        setContentView(R.layout.logo) // matches logo.xml
+
+        logo = findViewById(R.id.imageView)
+        appName = findViewById(R.id.prjname)
+
+        appName.alpha = 0f  //hide text initially
+
+        // Animate logo: Zoom in + fade in
+        logo.scaleX = 0f
+        logo.scaleY = 0f
+        logo.alpha = 0f
+
+        logo.animate()
+            .scaleX(1f)
+            .scaleY(1f)
+            .alpha(1f)
+            .setDuration(2000)
+            .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
+            .start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            appName.visibility = View.VISIBLE
+            appName.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .start()
+        }, 2000)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            startActivity(Intent(this@MainActivity, loginpage::class.java))
             finish()
-        }
+        }, 4000)
     }
 }

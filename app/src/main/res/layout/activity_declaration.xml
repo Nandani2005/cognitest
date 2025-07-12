@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".declaration">
+
+    <!-- Header with Declaration and Close Button -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:background="#102FE0"
+        >
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Declaration"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/closetab"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="#EB0717"
+            android:text="X"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerLayout"
+        android:scrollbarStyle="insideInset"
+        android:layout_above="@+id/startbtn"
+       >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_below="@id/headerLayout"
+            android:layout_above="@+id/startbtn">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:textColor="#F4033F"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:text="Guidelines to Online Examination for Students\n\nV.V. Important Instructions\n\n• Arrange for stable Internet connectivity.\n• Giving examination on Laptop or Desktop is highly recommended.\n• Make sure mobile/laptop is fully charged.\n• Power backup recommended.\n• Ensure sufficient data in your internet plan.\n• Login 10 min before the start.\n• Close all tabs before exam.\n• Do not switch tabs during the exam, it may count as malpractice.\n" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:textColor="#03A9F4"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:text=" \n\n\n\n\n\nAlso be careful about the following things \n\n• Do not receive calls during exam.\n• Use Ad Blocker to prevent pop-ups.\n• Clear browser cache/history.\n\nNotes:\n• Use Mozilla/Chrome browser.\n• Do not press back/close icons.\n• No login after 30 mins of exam start." />
+
+            <!-- Declaration Checkbox -->
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:textColor="#000000"
+                android:text="I hereby declare that I have read all the instructions carefully."
+                android:padding="10dp"
+                android:buttonTint="@color/black" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Start Button -->
+    <Button
+        android:id="@+id/startbtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="#132AA9"
+        android:padding="10dp"
+        android:text="Start"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+</RelativeLayout>
