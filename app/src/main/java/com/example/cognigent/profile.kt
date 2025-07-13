@@ -63,6 +63,11 @@ class profile : AppCompatActivity() {
         btnEditCourse = findViewById(R.id.btnEditCourse)
         btnSaveCourse = findViewById(R.id.btnSaveCourse)
 
+
+        textName.text =  "Name : $nameFromLogin"
+        textEmail.text =  "Name : $emailFromLogin"
+
+
         loadProfileData()
         setupEditSaveLogic(editName, btnEditName, btnSaveName, "name")
         setupEditSaveLogic(editEmail, btnEditEmail, btnSaveEmail, "email")
@@ -81,6 +86,7 @@ class profile : AppCompatActivity() {
         findViewById<ImageView>(R.id.nav_result).setOnClickListener {
             startActivity(Intent(this, profile::class.java))
         }
+
     }
 
     private fun loadProfileData() {

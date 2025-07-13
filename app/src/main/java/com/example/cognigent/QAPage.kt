@@ -1,15 +1,13 @@
 package com.example.cognigent
 
-import MCQDatabaseHelper
 import QuestionModel
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cognigent.R
 
 class QAPage : AppCompatActivity() {
 
-    private lateinit var dbHelper: MCQDatabaseHelper
+    private lateinit var dbHelper: DatabaseHelper
     private lateinit var questionList: List<QuestionModel>
     private var currentIndex = 0
 
@@ -21,13 +19,17 @@ class QAPage : AppCompatActivity() {
     private lateinit var optionD: RadioButton
     private lateinit var prevBtn: Button
     private lateinit var nextBtn: Button
-    private lateinit var submitBtn: Button
+    private lateinit var previewBtn: Button
+    private lateinit var testNumber: TextView
+    private lateinit var questionNumber: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qapage)
 
-        // Bind UI elements
+        dbHelper = DatabaseHelper(this)
+        questionList = dbHelper.getAllQuestions()
+
         questionText = findViewById(R.id.questionText)
         optionsGroup = findViewById(R.id.optionsGroup)
         optionA = findViewById(R.id.optionA)
@@ -36,77 +38,59 @@ class QAPage : AppCompatActivity() {
         optionD = findViewById(R.id.optionD)
         prevBtn = findViewById(R.id.prevButton)
         nextBtn = findViewById(R.id.nextButton)
+        previewBtn = findViewById(R.id.previewButton)
+        testNumber = findViewById(R.id.testNumber)
+        questionNumber = findViewById(R.id.questionNumber)
 
-
-        dbHelper = MCQDatabaseHelper(this)
-
-        // Insert sample questions if DB is empty
-        if (dbHelper.getAllQuestions().isEmpty()) {
-            dbHelper.insertQuestion("Capital of India?", "Mumbai", "Delhi", "Chennai", "Kolkata", 1)
-            dbHelper.insertQuestion("5 + 3 = ?", "6", "7", "8", "9", 2)
+        if (questionList.isNotEmpty()) {
+            showQuestion(currentIndex)
+        } else {
+            Toast.makeText(this, "No questions available.", Toast.LENGTH_SHORT).show()
         }
 
-        questionList = dbHelper.getAllQuestions()
-        displayQuestion()
-
         prevBtn.setOnClickListener {
-            saveSelectedOption()
             if (currentIndex > 0) {
                 currentIndex--
-                displayQuestion()
+                showQuestion(currentIndex)
             }
         }
 
         nextBtn.setOnClickListener {
-            saveSelectedOption()
             if (currentIndex < questionList.size - 1) {
                 currentIndex++
-                displayQuestion()
+                showQuestion(currentIndex)
             }
         }
 
-        submitBtn.setOnClickListener {
-            saveSelectedOption()
-            val score = questionList.count {
-                it.selectedIndex == it.correctIndex
-            }
-            Toast.makeText(this, "Your Score: $score / ${questionList.size}", Toast.LENGTH_LONG).show()
+        previewBtn.setOnClickListener {
+            Toast.makeText(this, "Preview feature coming soon!", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<Button>(R.id.closeButton).setOnClickListener {
+            finish()
         }
     }
 
-    private fun displayQuestion() {
-        val question = questionList[currentIndex]
-        questionText.text = "${currentIndex + 1}. ${question.questionText}"
+    private fun showQuestion(index: Int) {
+        val question = questionList[index]
+        questionText.text = question.questionText
         optionA.text = question.optionA
         optionB.text = question.optionB
         optionC.text = question.optionC
         optionD.text = question.optionD
 
+        questionNumber.text = "Question ${index + 1} of ${questionList.size}"
+        testNumber.text = "Test 1"
+
         optionsGroup.clearCheck()
+
+        // Restore selection if user already answered this
         when (question.selectedIndex) {
             0 -> optionA.isChecked = true
             1 -> optionB.isChecked = true
             2 -> optionC.isChecked = true
             3 -> optionD.isChecked = true
         }
-
-        prevBtn.isEnabled = currentIndex > 0
-        nextBtn.isEnabled = currentIndex < questionList.size - 1
     }
 
-    private fun saveSelectedOption() {
-        val selectedIndex = when (optionsGroup.checkedRadioButtonId) {
-            R.id.optionA -> 0
-            R.id.optionB -> 1
-            R.id.optionC -> 2
-            R.id.optionD -> 3
-            else -> -1
-        }
-
-        if (selectedIndex != -1) {
-            val qId = questionList[currentIndex].id
-            dbHelper.saveStudentResponse(qId, selectedIndex)
-            questionList = dbHelper.getAllQuestions()
-        }
-    }
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/inputExamType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Exam Type (e.g. BCA, MBA)"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/inputQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Question"
+            android:inputType="textMultiLine"/>
+
+        <EditText
+            android:id="@+id/inputOpt1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Option 1"/>
+
+        <EditText
+            android:id="@+id/inputOpt2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Option 2"/>
+
+        <EditText
+            android:id="@+id/inputOpt3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Option 3"/>
+
+        <EditText
+            android:id="@+id/inputOpt4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Option 4"/>
+
+        <EditText
+            android:id="@+id/inputCorrectAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correct Answer"/>
+
+        <Button
+            android:id="@+id/btnInsert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Insert Question"
+            android:layout_marginTop="20dp"
+            android:background="#129499"
+            android:textColor="#FFFFFF"/>
+
+    </LinearLayout>
+</ScrollView>
