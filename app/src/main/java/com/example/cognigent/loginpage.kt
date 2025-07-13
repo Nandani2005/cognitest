@@ -84,5 +84,10 @@ class loginpage : AppCompatActivity() {
                 }
             }
         }
+        val forget= findViewById<TextView>(R.id.forgetpass)
+        forget.setOnClickListener {
+            val password = Intent(this, forgetPassword::class.java)
+            startActivity(password)
+        }
     }
 }

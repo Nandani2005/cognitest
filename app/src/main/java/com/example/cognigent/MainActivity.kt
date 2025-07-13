@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             .scaleX(1f)
             .scaleY(1f)
             .alpha(1f)
-            .setDuration(2000)
+            .setDuration(1500)
             .setInterpolator(android.view.animation.AccelerateDecelerateInterpolator())
             .start()
 
@@ -39,13 +39,13 @@ class MainActivity : AppCompatActivity() {
             appName.visibility = View.VISIBLE
             appName.animate()
                 .alpha(1f)
-                .setDuration(1000)
+                .setDuration(700)
                 .start()
-        }, 2000)
+        }, 1600)
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@MainActivity, loginpage::class.java))
             finish()
-        }, 4000)
+        }, 3000)
     }
 }
