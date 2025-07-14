@@ -1,11 +1,15 @@
 package com.example.cognigent
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class coursePage : AppCompatActivity() {
@@ -28,9 +32,9 @@ class coursePage : AppCompatActivity() {
         welcomeText.text = "Welcome, $name!"
 
         val courses = listOf("Select Course", "BCA", "MCA", "BBA", "MBA" )
-        val adapter = ArrayAdapter(this, R.layout.spinner_selected_item, courses)
-        adapter.setDropDownViewResource(R.layout.spinner_item)
-        spinner.adapter = adapter
+        val Adapter = ArrayAdapter(this, R.layout.spinner_selected_item, courses)
+        Adapter.setDropDownViewResource(R.layout.spinner_item)
+        spinner.adapter = Adapter
 
 
 

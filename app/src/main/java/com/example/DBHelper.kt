@@ -72,5 +72,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "users.db", null, 1
         val values = ContentValues().apply { put(field, value) }
         return db.update("users", values, "email=?", arrayOf(email)) > 0
     }
+    fun isEmailRegistered(email: String): Boolean {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT id FROM users WHERE email=?", arrayOf(email))
+        val exists = cursor.count > 0
+        cursor.close()
+        db.close()
+        return exists
+    }
+
 } 
 

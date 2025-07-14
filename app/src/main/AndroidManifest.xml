@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logoimg"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -40,14 +40,14 @@
         <activity
             android:name=".profile"
             android:exported="false" />
-       <!-- <activity
+        <activity
             android:name=".QAPage"
-            android:exported="false" />-->
+            android:exported="false" />
         <activity
             android:name=".testpage"
             android:exported="false" />
         <activity
-            android:name=".QAPage"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Design.NoActionBar">

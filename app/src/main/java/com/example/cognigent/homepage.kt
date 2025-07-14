@@ -1,25 +1,69 @@
 package com.example.cognigent
 
-import android.R.attr.progress
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class homepage : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var items: itemAdaptor
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_homepage)
+        // Subject data
+        val bcaSubject = arrayListOf(
+            Subject(R.drawable.c_logo, "C Programming", "BCA101"),
+            Subject(R.drawable.cpp_logo, "C++ Programming", "BCA102"),
+            Subject(R.drawable.java_logo, "Java Programming", "BCA103"),
+            Subject(R.drawable.ds_logo, "Data Structure", "BCA104"),
+            Subject(R.drawable.html_logo, "HTML/CSS", "BCA105")
+        )
+
+        val mcaSubject = arrayListOf(
+            Subject(R.drawable.c_logo, "Machine Learning", "MCA101"),
+            Subject(R.drawable.cpp_logo, "Dotnet Programming", "MCA102"),
+            Subject(R.drawable.java_logo, "Advanced Java", "MCA103"),
+            Subject(R.drawable.ds_logo, "DSA", "MCA104"),
+            Subject(R.drawable.html_logo, "Web Design", "MCA105")
+        )
+
+        val bbaSubject = arrayListOf(
+            Subject(R.drawable.c_logo, "Accounting", "BBA101"),
+            Subject(R.drawable.cpp_logo, "Marketing", "BBA102"),
+            Subject(R.drawable.java_logo, "Finance", "BBA103"),
+            Subject(R.drawable.ds_logo, "Financial Management", "BBA104"),
+            Subject(R.drawable.html_logo, "Business Law", "BBA105")
+        )
+
+        val mbaSubject = arrayListOf(
+            Subject(R.drawable.c_logo, "Business Management", "MBA101"),
+            Subject(R.drawable.cpp_logo, "Human Resources", "MBA102"),
+            Subject(R.drawable.java_logo, "Entrepreneurship", "MBA103"),
+            Subject(R.drawable.ds_logo, "Marketing", "MBA104"),
+            Subject(R.drawable.html_logo, "Communication", "MBA105")
+        )
+
+        // Get intent data
         val name = intent.getStringExtra("name")
         val course = intent.getStringExtra("course") ?: ""
-        val textView = findViewById<TextView>(R.id.name)
-        textView.text = "$name"
+        val Scourse = course.uppercase()
+        val nameView=name.toString()
+        // Set welcome name
+        val textView = findViewById<TextView>(R.id.username)
+        textView.text = "$nameView"
+
+        // Navigation buttons
         findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
             startActivity(Intent(this, progress::class.java))
         }
@@ -31,64 +75,40 @@ class homepage : AppCompatActivity() {
         findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
             startActivity(Intent(this, profile::class.java))
         }
-         val c = findViewById<Button>(R.id.c)
-        val cpp = findViewById<Button>(R.id.cpp)
-        val java = findViewById<Button>(R.id.java)
-        val dsa = findViewById<Button>(R.id.dsa)
-        val dbms = findViewById<Button>(R.id.dbms)
-        val html = findViewById<Button>(R.id.html)
 
-        val javamca = findViewById<Button>(R.id.javamca)
-        val python = findViewById<Button>(R.id.python)
-        val oprsys = findViewById<Button>(R.id.oprsys)
-        val networks= findViewById<Button>(R.id.networks)
-        val ml = findViewById<Button>(R.id.ml)
-        val mis = findViewById<Button>(R.id.mis)
-
-        val buscom = findViewById<Button>(R.id.buscom)
-        val marketing = findViewById<Button>(R.id.marketing)
-        val finance = findViewById<Button>(R.id.finance)
-        val hres = findViewById<Button>(R.id.hres)
-        val eco = findViewById<Button>(R.id.eco)
-        val acc = findViewById<Button>(R.id.acc)
-
-        val maneco = findViewById<Button>(R.id.maneco)
-        val hr= findViewById<Button>(R.id.hr)
-        val blaw= findViewById<Button>(R.id.blaw)
-        val busana = findViewById<Button>(R.id.busana)
-        val bst= findViewById<Button>(R.id.bst)
-        val fin = findViewById<Button>(R.id.fin)
-
-        val bcaScroll = findViewById<ScrollView>(R.id.scrollSectionBCA)
-        val mcaScroll = findViewById<ScrollView>(R.id.scrollSectionMCA)
-        val bbaScroll = findViewById<ScrollView>(R.id.scrollSectionBBA)
-        val mbaScroll = findViewById<ScrollView>(R.id.scrollSectionMBA)
-
-        // Hide all scroll sections initially
-        bcaScroll.visibility = View.GONE
-        mcaScroll.visibility = View.GONE
-        bbaScroll.visibility = View.GONE
-        mbaScroll.visibility = View.GONE
+        // Toggle search box visibility
 
 
-        // Show based on course
-        when (course) {
-            "BCA" -> bcaScroll.visibility = View.VISIBLE
-            "MCA" -> mcaScroll.visibility = View.VISIBLE
-            "BBA" -> bbaScroll.visibility = View.VISIBLE
-            "MBA" -> mbaScroll.visibility = View.VISIBLE
+        // Setup RecyclerView
+        recyclerView = findViewById(R.id.ViewSubjects)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Set adapter based on course
+        items = when (Scourse) {
+            "BCA" -> itemAdaptor(bcaSubject, this)
+            "MCA" -> itemAdaptor(mcaSubject, this)
+            "BBA" -> itemAdaptor(bbaSubject, this)
+            "MBA" -> itemAdaptor(mbaSubject, this)
+            else -> itemAdaptor(arrayListOf(), this)
         }
 
-        c.setOnClickListener(){
-            val tr = Intent(this@homepage , testpage::class.java)
-            startActivity(tr)
+        recyclerView.adapter = items
+        val searchBtn = findViewById<ImageView>(R.id.search)
+        val searchBox = findViewById<EditText>(R.id.search_box)
+        searchBox.visibility=View.GONE
+        searchBtn.setOnClickListener {
+            searchBox.visibility =
+                if (searchBox.visibility == View.GONE) View.VISIBLE else View.GONE
         }
+        searchBox.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                items.filter(s.toString())
+            }
 
-
-
-
-
-
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
     }
+
 }
