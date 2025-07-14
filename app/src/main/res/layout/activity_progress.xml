@@ -1,41 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/homebg"
     android:layout_height="match_parent">
-
-    <!-- Background image -->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg4" />
-
-    <!-- Transparent black overlay -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000" />
-
-    <!-- Foreground content -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="~Progress Graph~"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="30dp"
+        android:textColor="#000"
+        android:fontFamily="sans-serif-black"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:padding="35dp"
+        android:layout_margin="20dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/subjectSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/spinner_drawable"
+            android:spinnerMode="dropdown" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="~Top Scorers~"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="30dp"
+            android:textColor="#000"
+            android:fontFamily="sans-serif-black"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1st: 90 % in  Test 1"
+            android:textSize="30dp"
+            android:textColor="#000"
+            android:padding="10dp"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2nd: 85% in  Test 2"
+            android:textSize="30dp"
+            android:textColor="#000"
+            android:padding="10dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3rd: 72% in  Test 3"
+            android:textSize="30dp"
+            android:textColor="#000"
+            android:padding="10dp"
+            />
+    </LinearLayout>
 </LinearLayout>
+
     <include
         android:id="@+id/bottomNavigation"
         layout="@layout/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-
         android:layout_height="55dp" />
-    </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

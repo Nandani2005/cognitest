@@ -78,6 +78,7 @@ class profile : AppCompatActivity() {
             val intent = Intent(this, homepage::class.java)
             intent.putExtra("course", prefs.getString("course", ""))
             startActivity(intent)
+            finish()
         }
         findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
             startActivity(Intent(this, progress::class.java))

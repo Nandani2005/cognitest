@@ -19,6 +19,7 @@ class progress : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.nav_home).setOnClickListener {
             startActivity(Intent(this, homepage::class.java))
+            finish()
         }
 
         findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
