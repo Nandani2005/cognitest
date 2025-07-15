@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:text="Email:"
         android:textSize="18sp"
-        android:paddingTop="10dp"   
+        android:paddingTop="10dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_marginBottom="4dp" />

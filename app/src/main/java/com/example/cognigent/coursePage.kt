@@ -4,39 +4,39 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.DBHelper
 
 class coursePage : AppCompatActivity() {
 
     private lateinit var selectedCourse: String
+    private lateinit var dbHelper: DBHelper
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course_page)
 
-        val name = intent.getStringExtra("name") ?: ""
         val email = intent.getStringExtra("email") ?: ""
+        dbHelper = DBHelper(this)
+
+        // Fetch name from DB
+        val user = dbHelper.getUserNameAndCourse(email)
+        val name = user?.first ?: "User"
 
         val welcomeText = findViewById<TextView>(R.id.welcomeText)
         val spinner = findViewById<Spinner>(R.id.courseSpinner)
         val proceedBtn = findViewById<Button>(R.id.proceedBtn)
 
-
         welcomeText.text = "Welcome, $name!"
 
-        val courses = listOf("Select Course", "BCA", "MCA", "BBA", "MBA" )
-        val Adapter = ArrayAdapter(this, R.layout.spinner_selected_item, courses)
-        Adapter.setDropDownViewResource(R.layout.spinner_item)
-        spinner.adapter = Adapter
+        val courses = listOf("Select Course", "BCA", "MCA", "BBA", "MBA")
+        val adapter = ArrayAdapter(this, R.layout.spinner_selected_item, courses)
+        adapter.setDropDownViewResource(R.layout.spinner_item)
+        spinner.adapter = adapter
 
-
+        selectedCourse = "Select Course"
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -52,12 +52,16 @@ class coursePage : AppCompatActivity() {
             if (selectedCourse == "Select Course") {
                 Toast.makeText(this, "Please select a course", Toast.LENGTH_SHORT).show()
             } else {
-                val intent = Intent(this, homepage::class.java)
-                intent.putExtra("name", name)
-                intent.putExtra("email", email)
-                intent.putExtra("course", selectedCourse)
-                startActivity(intent)
-                finish()
+                // Save selected course to DB
+                val success = dbHelper.updateCourse(email, selectedCourse)
+                if (success) {
+                    val intent = Intent(this, homepage::class.java)
+                    intent.putExtra("email", email)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Failed to save course. Please try again.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

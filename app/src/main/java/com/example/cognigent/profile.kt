@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.DBHelper
 
 class profile : AppCompatActivity() {
 
@@ -29,10 +30,32 @@ class profile : AppCompatActivity() {
     private lateinit var spinnerCourse: Spinner
     private lateinit var textName: TextView
     private lateinit var textEmail: TextView
-
+    val email = intent.getStringExtra("email") ?: ""
+    val dbHelper= DBHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+
+        findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
+            val intent1=Intent(this, progress::class.java)
+            intent1.putExtra("email", email)
+            startActivity(intent1)
+        }
+
+        findViewById<ImageView>(R.id.nav_result).setOnClickListener {
+            val intent2=Intent(this, notification::class.java)
+            intent2.putExtra("email", email)
+            startActivity(intent2)        }
+
+        findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
+            val intent3=Intent(this, profile::class.java)
+            intent3.putExtra("email", email)
+            startActivity(intent3)        }
+        findViewById<ImageView>(R.id.nav_home).setOnClickListener {
+            val intent4=Intent(this, homepage::class.java)
+            intent4.putExtra("email", email)
+            startActivity(intent4)        }
 
         prefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
 
@@ -64,8 +87,8 @@ class profile : AppCompatActivity() {
         btnSaveCourse = findViewById(R.id.btnSaveCourse)
 
 
-        textName.text =  "Name : $nameFromLogin"
-        textEmail.text =  "Name : $emailFromLogin"
+        textName.text = "Name : $nameFromLogin"
+        textEmail.text = "Name : $emailFromLogin"
 
 
         loadProfileData()
@@ -74,22 +97,8 @@ class profile : AppCompatActivity() {
         setupEditSaveLogic(editPhone, btnEditPhone, btnSavePhone, "phone")
         setupCourseDropdown()
 
-        findViewById<ImageView>(R.id.nav_home).setOnClickListener {
-            val intent = Intent(this, homepage::class.java)
-            intent.putExtra("course", prefs.getString("course", ""))
-            startActivity(intent)
-            finish()
-        }
-        findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
-            startActivity(Intent(this, progress::class.java))
-        }
-
-        findViewById<ImageView>(R.id.nav_result).setOnClickListener {
-            startActivity(Intent(this, profile::class.java))
-        }
 
     }
-
     private fun loadProfileData() {
         val name = prefs.getString("name", "")
         val email = prefs.getString("email", "")
@@ -145,9 +154,9 @@ class profile : AppCompatActivity() {
             Toast.makeText(this, "Course saved", Toast.LENGTH_SHORT).show()
             animateView(spinnerCourse, false)
             animateView(textCourse, true)
-
+              dbHelper.updateCourse(email, selected)
             val intent = Intent(this, homepage::class.java)
-            intent.putExtra("course", selected)
+            intent.putExtra("email", email)
             startActivity(intent)
         }
     }
@@ -160,4 +169,5 @@ class profile : AppCompatActivity() {
             .withEndAction { if (!show) view.visibility = View.GONE }
             .start()
     }
+
 }

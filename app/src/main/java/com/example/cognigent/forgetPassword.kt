@@ -4,13 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.DBHelper
 
@@ -22,7 +16,7 @@ class forgetPassword : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forget_password)
 
-        dbHelper = DBHelper(this) // Initialize DBHelper
+        dbHelper = DBHelper(this)
 
         val back = findViewById<TextView>(R.id.back)
         val emailInput = findViewById<EditText>(R.id.mail)
@@ -30,11 +24,19 @@ class forgetPassword : AppCompatActivity() {
         val otpLayout = findViewById<LinearLayout>(R.id.otpLayout)
         val verifyBtn = findViewById<Button>(R.id.verify)
         val timer = findViewById<TextView>(R.id.timer)
+        val otpInput = findViewById<EditText>(R.id.otp)
+        val resetBtn = findViewById<Button>(R.id.backtologin)
+        val resetPasswordLayout = findViewById<LinearLayout>(R.id.resetpassword)
+        val emailLayout = findViewById<LinearLayout>(R.id.editEmail)
+        val newPassword = findViewById<EditText>(R.id.resetpass)
+        val confirmPassword = findViewById<EditText>(R.id.confirmpass)
 
         otpLayout.visibility = View.GONE
+        resetPasswordLayout.visibility = View.GONE
 
         back.setOnClickListener {
             startActivity(Intent(this, loginpage::class.java))
+            finish()
         }
 
         getOtpBtn.setOnClickListener {
@@ -56,6 +58,7 @@ class forgetPassword : AppCompatActivity() {
                     override fun onFinish() {
                         getOtpBtn.visibility = View.VISIBLE
                         otpLayout.visibility = View.GONE
+                        Toast.makeText(this@forgetPassword, "OTP expired. Please try again.", Toast.LENGTH_SHORT).show()
                     }
                 }.start()
 
@@ -65,12 +68,42 @@ class forgetPassword : AppCompatActivity() {
         }
 
         verifyBtn.setOnClickListener {
+            val otp = otpInput.text.toString().trim()
+            if (otp.isEmpty()) {
+                Toast.makeText(this, "Please enter OTP", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Simulate successful verification, go to reset password page
-           // val email = emailInput.text.toString().trim()
-            //val intent = Intent(this, ResetPassword::class.java)
-            //intent.putExtra("email", email)
-            //startActivity(intent)
+            // Simulate OTP always correct
+            emailLayout.visibility = View.GONE
+            resetPasswordLayout.visibility = View.VISIBLE
+            otpLayout.visibility = View.GONE
+        }
+
+        resetBtn.setOnClickListener {
+            val password = newPassword.text.toString().trim()
+            val confirm = confirmPassword.text.toString().trim()
+            val email = emailInput.text.toString().trim()
+
+            if (password.isEmpty() || confirm.isEmpty()) {
+                Toast.makeText(this, "Please enter both password fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (password != confirm) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val updated = dbHelper.updatePassword(email, password)
+
+            if (updated) {
+                Toast.makeText(this, "Password updated successfully", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, loginpage::class.java))
+                finish()
+            } else {
+                Toast.makeText(this, "Failed to update password", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

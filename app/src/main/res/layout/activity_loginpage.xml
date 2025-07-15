@@ -91,7 +91,7 @@
         android:background="@drawable/curvebg"
         android:orientation="vertical"
         android:padding="20dp"
-        android:visibility="gone">
+        >
 
         <TextView
             android:layout_width="match_parent"
