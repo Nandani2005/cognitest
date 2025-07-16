@@ -63,35 +63,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "users.db", null, 1
         return result
     }
 
-    // Get user details (name + email)
-    fun getUserDetails(email: String): Pair<String, String>? {
-        val db = readableDatabase
-        val cursor = db.rawQuery(
-            "SELECT name, email FROM users WHERE email=?",
-            arrayOf(email)
-        )
-        return if (cursor.moveToFirst()) {
-            val name = cursor.getString(0)
-            val userEmail = cursor.getString(1)
-            cursor.close()
-            db.close()
-            Pair(name, userEmail)
-        } else {
-            cursor.close()
-            db.close()
-            null
-        }
-    }
-
-    // Generic field update
-    fun updateUserField(email: String, field: String, value: String): Boolean {
-        val db = writableDatabase
-        val values = ContentValues().apply { put(field, value) }
-        val result = db.update("users", values, "email=?", arrayOf(email)) > 0
-        db.close()
-        return result
-    }
-
     // Check if email exists
     fun isEmailRegistered(email: String): Boolean {
         val db = readableDatabase
@@ -102,17 +73,18 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "users.db", null, 1
         return exists
     }
 
-    // Reset/update password
+    // Reset or update password
     fun updatePassword(email: String, newPassword: String): Boolean {
         val db = writableDatabase
-        val hashedPassword = hashPassword(newPassword)
+        val Password = hashPassword(newPassword)
         val values = ContentValues().apply {
-            put("password", hashedPassword)
+            put("password", Password)
         }
         val rowsUpdated = db.update("users", values, "email = ?", arrayOf(email))
         db.close()
         return rowsUpdated > 0
     }
+
     // Get user name and course by email
     fun getUserNameAndCourse(email: String): Pair<String, String>? {
         val db = readableDatabase
@@ -129,6 +101,24 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "users.db", null, 1
             null
         }
     }
+
+    fun getPassword(email: String): String? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT password FROM users WHERE email=?", arrayOf(email))
+        return if (cursor.moveToFirst()) {
+            val password = cursor.getString(0)
+            cursor.close()
+            db.close()
+            password
+        } else {
+            cursor.close()
+            db.close()
+            null
+        }
+    }
+
+
+    // Update only course
     fun updateCourse(email: String, course: String): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply { put("course", course) }
@@ -137,4 +127,44 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "users.db", null, 1
         return updated > 0
     }
 
+    // Update name and course (basic)
+    fun updateUserProfile(email: String, name: String, course: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("name", name)
+            put("course", course)
+        }
+        val result = db.update("users", values, "email=?", arrayOf(email))
+        db.close()
+        return result > 0
+    }
+
+    // Generic single field update
+    fun updateUserField(email: String, field: String, value: String): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply { put(field, value) }
+        val result = db.update("users", values, "email=?", arrayOf(email)) > 0
+        db.close()
+        return result
+    }
+
+    // Update name, course, email, and password together
+    fun updateUserProfileWithEmailChange(
+        oldEmail: String,
+        newEmail: String,
+        name: String,
+        course: String,
+        password: String
+    ): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("name", name)
+            put("email", newEmail)
+            put("course", course)
+            put("password", hashPassword(password))
+        }
+        val result = db.update("users", values, "email = ?", arrayOf(oldEmail))
+        db.close()
+        return result > 0
+    }
 }

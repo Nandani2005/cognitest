@@ -40,7 +40,7 @@ class itemAdaptor(
         holder.card.setOnClickListener {
             val intent = Intent(context, testpage::class.java)
             intent.putExtra("subjectName", subject.subjectName)
-            intent.putExtra("subjectCode", subject.subjectCode)
+//            intent.putExtra("subjectCode", subject.subjectCode)
             context.startActivity(intent)
         }
     }

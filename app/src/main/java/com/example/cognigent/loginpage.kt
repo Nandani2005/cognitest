@@ -48,8 +48,14 @@ class loginpage : AppCompatActivity() {
         login.setOnClickListener {
             val email = loginEmail.text.toString()
             val password = loginPassword.text.toString()
-            if (dbHelper.checkLogin(email, password)) {
-                val user = dbHelper.getUserDetails(email)
+            if(email.equals("admin@gmail.com")){
+                val intent = Intent(this, AddQuestionActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            else if (dbHelper.checkLogin(email, password)) {
+                val user = dbHelper.getUserNameAndCourse(email)
                 val intent = Intent(this, coursePage::class.java)
                 intent.putExtra("name", user?.first)
                 intent.putExtra("email", user?.second)
