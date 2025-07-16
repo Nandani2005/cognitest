@@ -58,7 +58,7 @@ class loginpage : AppCompatActivity() {
                 val user = dbHelper.getUserNameAndCourse(email)
                 val intent = Intent(this, coursePage::class.java)
                 intent.putExtra("name", user?.first)
-                intent.putExtra("email", user?.second)
+                intent.putExtra("email", email)
                 startActivity(intent)
                 finish()
             } else {
