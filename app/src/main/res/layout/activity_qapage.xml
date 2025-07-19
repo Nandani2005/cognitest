@@ -7,6 +7,12 @@
     android:padding="16dp"
     android:background="#FAFAFA">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
     <!-- Header Row: Test No and Close -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,13 +48,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
+        android:layout_marginBottom="30dp"
         android:paddingBottom="12dp">
 
         <TextView
             android:id="@+id/questionNumber"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Question 1 of 10"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -71,8 +77,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Question will appear here"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textStyle="bold"
+        android:gravity="center"
         android:textColor="#000000"
         android:paddingBottom="16dp" />
 
@@ -80,10 +87,12 @@
     <RadioGroup
         android:id="@+id/optionsGroup"
         android:layout_width="match_parent"
+        android:padding="10dp"
         android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/optionA"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -92,6 +101,7 @@
 
         <RadioButton
             android:id="@+id/optionB"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -100,6 +110,7 @@
 
         <RadioButton
             android:id="@+id/optionC"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -108,50 +119,55 @@
 
         <RadioButton
             android:id="@+id/optionD"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:buttonTint="@color/black"
             android:text="Option D" />
     </RadioGroup>
-
+    </LinearLayout>
     <!-- Navigation Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
         >
+
 
         <Button
             android:id="@+id/prevButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="#FF0000"
             android:layout_height="wrap_content"
-            android:padding="20dp"
+            android:padding="16dp"
             android:text="Previous" />
         <Space
             android:layout_width="30dp"
-
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="match_parent"/>
 
         <Button
             android:id="@+id/previewButton"
-            android:layout_width="100dp"
-            android:padding="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="#34c7f5"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:text="Preview" />
+
         <Space
             android:layout_width="30dp"
-
-            android:layout_height="wrap_content"
-            />
-
+            android:layout_height="match_parent"/>
         <Button
             android:id="@+id/nextButton"
-            android:layout_width="100dp"
-            android:padding="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="#008000"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:text="Next" />
     </LinearLayout>
 </LinearLayout>

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             appName.visibility = View.VISIBLE
             appName.animate()
-                .alpha(1f)
+                .alpha(1f)  
                 .setDuration(700)
                 .start()
         }, 1600)

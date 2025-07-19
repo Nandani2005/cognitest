@@ -14,7 +14,7 @@ class testpage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_testpage)
-        val close = findViewById<Button>(R.id.closebtn)
+        val close = findViewById<TextView>(R.id.closebtn)
         val start1 = findViewById<Button>(R.id.btn1)
         val start2 = findViewById<Button>(R.id.btn2)
         val start3 = findViewById<Button>(R.id.btn3)

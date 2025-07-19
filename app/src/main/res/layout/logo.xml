@@ -9,10 +9,10 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="90dp"
         android:contentDescription="Test_Pilot_Logo"
         android:src="@drawable/logopage" />
 
@@ -20,9 +20,10 @@
 
     <TextView
         android:id="@+id/prjname"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="101dp"
-        android:fontFamily="sans-serif-black"
+        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="COGNITEST"
         android:textColor="#B40D65"
