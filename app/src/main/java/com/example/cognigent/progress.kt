@@ -66,7 +66,6 @@ class progress : AppCompatActivity() {
 
         val adapter = ArrayAdapter(this, R.layout.spinner_selected_item, subjectList)
         adapter.setDropDownViewResource(R.layout.spinner_item)
-
         subjectSpinner.adapter = adapter
     }
 }

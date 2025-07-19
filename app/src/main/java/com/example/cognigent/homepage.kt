@@ -70,22 +70,22 @@ class homepage : AppCompatActivity() {
                 Subject(R.drawable.html_logo, "HTML/CSS", "BCA105")
             )
             "MCA" -> listOf(
-                Subject(R.drawable.c_logo, "Machine Learning", "MCA101"),
-                Subject(R.drawable.cpp_logo, "Dotnet Programming", "MCA102"),
+                Subject(R.drawable.ml_logo, "Machine Learning", "MCA101"),
+                Subject(R.drawable.dotnet_logo, "Dotnet Programming", "MCA102"),
                 Subject(R.drawable.java_logo, "Advanced Java", "MCA103"),
-                Subject(R.drawable.ds_logo, "DSA", "MCA104"),
-                Subject(R.drawable.html_logo, "Web Design", "MCA105")
+                Subject(R.drawable.dsa_logo, "DSA", "MCA104"),
+                Subject(R.drawable.webdesign_logo, "Web Design", "MCA105")
             )
             "BBA" -> listOf(
-                Subject(R.drawable.c_logo, "Accounting", "BBA101"),
-                Subject(R.drawable.cpp_logo, "Marketing", "BBA102"),
-                Subject(R.drawable.java_logo, "Finance", "BBA103"),
-                Subject(R.drawable.ds_logo, "Financial Management", "BBA104"),
-                Subject(R.drawable.html_logo, "Business Law", "BBA105")
+                Subject(R.drawable.acc_logo, "Accounting", "BBA101"),
+                Subject(R.drawable.marketing_logo, "Marketing", "BBA102"),
+                Subject(R.drawable.finance_logo, "Finance", "BBA103"),
+                Subject(R.drawable.fin_mangement, "Financial Management", "BBA104"),
+                Subject(R.drawable.bin_law_logo, "Business Law", "BBA105")
             )
             "MBA" -> listOf(
-                Subject(R.drawable.c_logo, "Business Management", "MBA101"),
-                Subject(R.drawable.cpp_logo, "Human Resources", "MBA102"),
+                Subject(R.drawable.bus_man_logo, "Business Management", "MBA101"),
+                Subject(R.drawable.bus_man_logo, "Human Resources", "MBA102"),
                 Subject(R.drawable.java_logo, "Entrepreneurship", "MBA103"),
                 Subject(R.drawable.ds_logo, "Marketing", "MBA104"),
                 Subject(R.drawable.html_logo, "Communication", "MBA105")
