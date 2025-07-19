@@ -92,33 +92,6 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
         return questionList
     }
 
-    fun getAllQuestions(): List<QuestionModel> {
-        val list = mutableListOf<QuestionModel>()
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM questions", null)
-
-        if (cursor.moveToFirst()) {
-            do {
-                list.add(
-                    QuestionModel(
-                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                        examType = cursor.getString(cursor.getColumnIndexOrThrow("examType")),
-                        questionText = cursor.getString(cursor.getColumnIndexOrThrow("question")),
-                        optionA = cursor.getString(cursor.getColumnIndexOrThrow("optionA")),
-                        optionB = cursor.getString(cursor.getColumnIndexOrThrow("optionB")),
-                        optionC = cursor.getString(cursor.getColumnIndexOrThrow("optionC")),
-                        optionD = cursor.getString(cursor.getColumnIndexOrThrow("optionD")),
-                        correctIndex = cursor.getInt(cursor.getColumnIndexOrThrow("correctAnswer")),
-                        Attemp = cursor.getInt(cursor.getColumnIndexOrThrow("userAnswer"))
-                    )
-                )
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        return list
-    }
-
     fun saveUserAnswer(questionId: Int, selectedIndex: Int) {
         val db = writableDatabase
         val values = ContentValues().apply {

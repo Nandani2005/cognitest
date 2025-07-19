@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:padding="10dp"
+    android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".declaration">
@@ -10,13 +12,13 @@
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:background="#102FE0"
         >
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,14 +27,17 @@
             android:textSize="24sp"
             android:padding="10dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/closetab"
             android:layout_width="60dp"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
             android:background="#EB0717"
             android:text="X"
+            android:layout_margin="5dp"
             android:textSize="20sp"
             android:textColor="#FFFFFF" />
     </LinearLayout>
@@ -73,8 +78,9 @@
                 android:background="#FFFFFF"
                 android:textColor="#03A9F4"
                 android:textSize="20sp"
+                android:layout_marginBottom="10dp"
                 android:paddingLeft="18dp"
-                android:text=" \n\n\n\n\n\nAlso be careful about the following things \n\n• Do not receive calls during exam.\n• Use Ad Blocker to prevent pop-ups.\n• Clear browser cache/history.\n\nNotes:\n• Use Mozilla/Chrome browser.\n• Do not press back/close icons.\n• No login after 30 mins of exam start." />
+                android:text="\n\n\n\nAlso be careful about the following things \n\n• Do not receive calls during exam.\n• Use Ad Blocker to prevent pop-ups.\n• Clear browser cache/history.\n\nNotes:\n• Use Mozilla/Chrome browser.\n• Do not press back/close icons.\n• No login after 30 mins of exam start." />
 
             <!-- Declaration Checkbox -->
             <CheckBox

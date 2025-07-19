@@ -35,13 +35,8 @@ class QAPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qapage)
-
         dbHelper = QuestionDatabase(this)
-       // questionList = dbHelper.getAllQuestions()
-
-
         questionList = dbHelper.getQuestionsByExamType("mba")
-
 
 
         questionText = findViewById(R.id.questionText)
@@ -98,11 +93,39 @@ class QAPage : AppCompatActivity() {
 
 
         closeBtn.setOnClickListener {
+            showLogoutPopup()
             countDownTimer.cancel()
+            val score = calculateScore()
+            dbHelper.saveResult(score,"MBA")
+            Toast.makeText(this, "Score: $score / ${questionList.size}", Toast.LENGTH_LONG).show()
             finish()
         }
     }
+    private fun showLogoutPopup() {
+        val inflater = layoutInflater
+        val popupView = inflater.inflate(R.layout.logout_popup, null)
+        val confirmBtn = popupView.findViewById<Button>(R.id.yesButton)
+        val cancelBtn = popupView.findViewById<Button>(R.id.noButton)
+        confirmBtn.setOnClickListener {
+            val intent = Intent(this, loginpage::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+        cancelBtn.setOnClickListener {
 
+        }
+        val popup = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+// IMPORTANT: Show the popup
+        popup.showAtLocation(popupView, android.view.Gravity.CENTER, 0, 0)
+        true
+        popup.isFocusable = true
+    }
     private fun showQuestion(index: Int) {
         val question = questionList[index]
 
@@ -140,7 +163,7 @@ class QAPage : AppCompatActivity() {
 
             override fun onFinish() {
                 val score = calculateScore()
-                dbHelper.saveResult(score)
+                dbHelper.saveResult(score,"BCA")
                 timerText.text = "Time's up!"
                 disableOptions()
 

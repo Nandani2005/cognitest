@@ -31,7 +31,7 @@ class profile : AppCompatActivity() {
         findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
             startActivity(Intent(this, progress::class.java).apply {
                 putExtra("email", email)
-                putExtra("newSubject" , newSubject)
+                putExtra("newSubject" , user?.second)
 
             })
         }

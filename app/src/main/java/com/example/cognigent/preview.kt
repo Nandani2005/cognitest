@@ -25,7 +25,7 @@ class preview : AppCompatActivity() {
         backBtn = findViewById(R.id.backBtn)
 
         val dbHelper = QuestionDatabase(this)
-        questionList = dbHelper.getAllQuestions() as ArrayList<QuestionModel>
+        questionList = dbHelper.getQuestionsByExamType("mba") as ArrayList<QuestionModel>
 
         recyclerView.layoutManager = GridLayoutManager(this, 4)
         recyclerView.adapter = PreviewAdapter(questionList)
