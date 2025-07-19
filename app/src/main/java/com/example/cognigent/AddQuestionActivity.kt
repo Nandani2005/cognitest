@@ -14,6 +14,7 @@ class AddQuestionActivity : AppCompatActivity() {
     private lateinit var inputOpt4: EditText
     private lateinit var inputCorrectAnswer: EditText
     private lateinit var btnInsert: Button
+    private lateinit var deleteAll: Button
 
     private lateinit var dbHelper: DatabaseHelper
 
@@ -31,6 +32,7 @@ class AddQuestionActivity : AppCompatActivity() {
         inputOpt4 = findViewById(R.id.inputOpt4)
         inputCorrectAnswer = findViewById(R.id.inputCorrectAnswer)
         btnInsert = findViewById(R.id.btnInsert)
+        deleteAll = findViewById(R.id.deleteAll)
 
         btnInsert.setOnClickListener {
             val examType = inputExamType.text.toString().trim()
@@ -57,6 +59,17 @@ class AddQuestionActivity : AppCompatActivity() {
                 }
             } else {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        deleteAll.setOnClickListener {
+            val dbHelper = DatabaseHelper(this)
+            val deletedRows = dbHelper.deleteAllQuestions()
+
+            if (deletedRows > 0) {
+                Toast.makeText(this, "All questions deleted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No questions to delete", Toast.LENGTH_SHORT).show()
             }
         }
     }

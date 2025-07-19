@@ -29,6 +29,7 @@ class homepage : AppCompatActivity() {
 
         // ✅ Get email from intent
         val email = intent.getStringExtra("email") ?: ""
+        val selectedCourse = intent.getStringExtra("selectedCourse") ?: ""
         // ✅ Get user details from DB
         val user = dbHelper.getUserNameAndCourse(email)
         val name = user?.first ?: "User"
@@ -41,6 +42,7 @@ class homepage : AppCompatActivity() {
         findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
             val intent1=Intent(this, progress::class.java)
             intent1.putExtra("email", email)
+            intent1.putExtra("selectedCourse" , selectedCourse)
             startActivity(intent1)
         }
 

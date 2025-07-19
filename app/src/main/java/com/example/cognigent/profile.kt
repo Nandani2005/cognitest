@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,7 @@ class profile : AppCompatActivity() {
 
         email = intent.getStringExtra("email") ?: ""
         dbHelper = DBHelper(this)
-
+        val  newSubject = intent.getStringExtra("newSubject")
         val user = dbHelper.getUserNameAndCourse(email)
 
         findViewById<TextView>(R.id.profilename).text ="Name: " + user?.first
@@ -30,6 +31,8 @@ class profile : AppCompatActivity() {
         findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
             startActivity(Intent(this, progress::class.java).apply {
                 putExtra("email", email)
+                putExtra("newSubject" , newSubject)
+
             })
         }
 
@@ -61,9 +64,41 @@ class profile : AppCompatActivity() {
             startActivity(intent)
         }
 
-        findViewById<TextView>(R.id.logout).setOnClickListener {
-            startActivity(Intent(this, loginpage::class.java))
-            finish()
+        val logoutBtn = findViewById<TextView>(R.id.logout)
+        logoutBtn.setOnClickListener {
+            showLogoutPopup()
+        }
+
+    }
+    private fun showLogoutPopup() {
+        val inflater = layoutInflater
+        val popupView = inflater.inflate(R.layout.logout_popup, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        // Show at center
+        popupWindow.showAtLocation(findViewById(android.R.id.content), Gravity.CENTER, 0, 0)
+
+        val confirmBtn = popupView.findViewById<Button>(R.id.yesButton)
+        val cancelBtn = popupView.findViewById<Button>(R.id.noButton)
+
+        confirmBtn.setOnClickListener {
+            popupWindow.dismiss()
+            // Go to login page or close session
+            val intent = Intent(this, loginpage::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+        }
+
+        cancelBtn.setOnClickListener {
+            popupWindow.dismiss()
         }
     }
+
 }

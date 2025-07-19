@@ -106,5 +106,45 @@ class DatabaseHelper(context: Context) :
             .takeIf { it >= 0 } ?: 0
     }
 
+    fun deleteAllQuestions(): Int {
+        val db = writableDatabase
+        val rowsDeleted = db.delete(TABLE_QUESTIONS, null, null)
+        db.close()
+        return rowsDeleted
+    }
+
+
+    fun getQuestionsByExamType(examType: String): List<QuestionModel> {
+        val list = mutableListOf<QuestionModel>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM questn WHERE examType = ?", arrayOf(examType))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val opt1 = cursor.getString(cursor.getColumnIndexOrThrow("opt1"))
+                val opt2 = cursor.getString(cursor.getColumnIndexOrThrow("opt2"))
+                val opt3 = cursor.getString(cursor.getColumnIndexOrThrow("opt3"))
+                val opt4 = cursor.getString(cursor.getColumnIndexOrThrow("opt4"))
+                val correctAns = cursor.getString(cursor.getColumnIndexOrThrow("correctAns"))
+
+                val question = QuestionModel(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    questionText = cursor.getString(cursor.getColumnIndexOrThrow("ques")),
+                    optionA = opt1,
+                    optionB = opt2,
+                    optionC = opt3,
+                    optionD = opt4,
+                    correctIndex = getCorrectIndex(correctAns, listOf(opt1, opt2, opt3, opt4))
+                )
+                list.add(question)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return list
+    }
+
 
 }

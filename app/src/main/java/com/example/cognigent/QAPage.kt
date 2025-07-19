@@ -28,7 +28,12 @@ class QAPage : AppCompatActivity() {
         setContentView(R.layout.activity_qapage)
 
         dbHelper = DatabaseHelper(this)
-        questionList = dbHelper.getAllQuestions()
+       // questionList = dbHelper.getAllQuestions()
+
+
+        questionList = dbHelper.getQuestionsByExamType("mba")
+
+
 
         questionText = findViewById(R.id.questionText)
         optionsGroup = findViewById(R.id.optionsGroup)

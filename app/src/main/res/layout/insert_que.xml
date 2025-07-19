@@ -62,5 +62,14 @@
             android:background="#129499"
             android:textColor="#FFFFFF"/>
 
+        <Button
+            android:id="@+id/deleteAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete ALl"
+            android:layout_marginTop="20dp"
+            android:background="#129499"
+            android:textColor="#FFFFFF"/>
+
     </LinearLayout>
 </ScrollView>
