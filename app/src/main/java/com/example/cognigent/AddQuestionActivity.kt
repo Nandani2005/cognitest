@@ -16,13 +16,13 @@ class AddQuestionActivity : AppCompatActivity() {
     private lateinit var btnInsert: Button
     private lateinit var deleteAll: Button
 
-    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var dbHelper: QuestionDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.insert_que)
 
-        dbHelper = DatabaseHelper(this)
+        dbHelper = QuestionDatabase(this)
 
         inputExamType = findViewById(R.id.inputExamType)
         inputQuestion = findViewById(R.id.inputQuestion)
@@ -48,7 +48,7 @@ class AddQuestionActivity : AppCompatActivity() {
                 opt3.isNotEmpty() && opt4.isNotEmpty() && correctAns.isNotEmpty()
             ) {
                 val result = dbHelper.insertQuestion(
-                    examType, question, opt1, opt2, opt3, opt4, correctAns
+                    examType, question, opt1, opt2, opt3, opt4, correctAns.toInt()
                 )
 
                 if (result != -1L) {
@@ -63,8 +63,8 @@ class AddQuestionActivity : AppCompatActivity() {
         }
 
         deleteAll.setOnClickListener {
-            val dbHelper = DatabaseHelper(this)
-            val deletedRows = dbHelper.deleteAllQuestions()
+            val dbHelper = QuestionDatabase(this)
+            val deletedRows = dbHelper.deleteQuestion(1)
 
             if (deletedRows > 0) {
                 Toast.makeText(this, "All questions deleted", Toast.LENGTH_SHORT).show()
