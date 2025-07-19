@@ -53,8 +53,9 @@ class progress : AppCompatActivity() {
             startActivity(intent4)
         }
 
-        // Set up subject list based on course
-        val subjectList = when (course) {
+        val actualCourse = if (!newcourse.isNullOrEmpty()) newcourse else course
+
+        val subjectList = when (actualCourse) {
             "BCA" -> listOf("Select Subject", "C Programming", "C++ Programming", "Java Programming", "Data Structure", "HTML/CSS")
             "MCA" -> listOf("Select Subject", "Machine Learning", "Dotnet Programming", "Advanced Java", "DSA", "Web Design")
             "BBA" -> listOf("Select Subject", "Accounting", "Marketing", "Finance", "Financial Management", "Business Law")
@@ -62,8 +63,10 @@ class progress : AppCompatActivity() {
             else -> listOf("Select Subject")
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, subjectList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        val adapter = ArrayAdapter(this, R.layout.spinner_selected_item, subjectList)
+        adapter.setDropDownViewResource(R.layout.spinner_item)
+
         subjectSpinner.adapter = adapter
     }
 }
