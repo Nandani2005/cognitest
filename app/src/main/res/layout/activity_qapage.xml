@@ -1,173 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/testScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#FAFAFA">
+    android:background="@android:color/white"
+    android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
-    <!-- Header Row: Test No and Close -->
-    <LinearLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="333dp"
+        android:orientation="vertical">
 
-        android:paddingBottom="8dp">
+        <!-- Top Bar: Test No and Close -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp">
 
+            <TextView
+                android:id="@+id/testno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Test No: 1"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/closeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close"
+                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+        </LinearLayout>
+
+        <!-- Submit & Change Language -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+
+            android:paddingBottom="8dp">
+
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@color/purple_700"
+                android:text="Submit" />
+
+            <Button
+                android:id="@+id/changeLangButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/purple_700"
+                android:text="A/अ"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <!-- Attempted Questions -->
         <TextView
-            android:id="@+id/testNumber"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:text="Test 1"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/closeButton"
+            android:id="@+id/attemptedCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Close"
-            android:layout_gravity="end"
-            android:backgroundTint="#F44336"
-            android:textColor="#FFFFFF"
-            android:padding="6dp" />
-    </LinearLayout>
-
-    <!-- Question Info: Question No and Timer -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="30dp"
-        android:paddingBottom="12dp">
-
-        <TextView
-            android:id="@+id/questionNumber"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:text="Question 1 of 10"
-            android:textStyle="bold"
+            android:paddingBottom="12dp"
+            android:text="Attempted: 3/10"
             android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/timerText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00"
-            android:textStyle="bold"
-            android:layout_gravity="end"
             android:textSize="16sp"
-            android:textColor="#4CAF50" />
+            android:textStyle="italic" />
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!-- Question Text -->
+                <TextView
+                    android:id="@+id/questionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:text="Q1. What is the output of 2 + 2?"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Question Image -->
+                <ImageView
+                    android:id="@+id/questionImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="12dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_launcher_background"
+                    android:visibility="gone" />
+
+                <!-- Option Buttons -->
+                <RadioGroup
+                    android:id="@+id/optionsGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/option1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/black"
+                        android:text="Option 1"
+                        android:textColor="@color/black" />
+
+                    <RadioButton
+                        android:id="@+id/option2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/black"
+                        android:text="Option 2"
+                        android:textColor="@color/black" />
+
+                    <RadioButton
+                        android:id="@+id/option3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/black"
+                        android:text="Option 3"
+                        android:textColor="@color/black" />
+
+                    <RadioButton
+                        android:id="@+id/option4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/black"
+                        android:text="Option 4"
+                        android:textColor="@color/black" />
+                </RadioGroup>
+
+                <!-- Matching Type (Type 3) -->
+                <LinearLayout
+                    android:id="@+id/matchingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Column A"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/matchItemA1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A. Java"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/matchItemA2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="B. Python"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/matchItemA3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="C. C++"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Column B"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/matchItemB1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1. Object Oriented"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/matchItemB2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2. Scripting"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/matchItemB3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3. Low Level"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Correct Answer -->
+                <TextView
+                    android:id="@+id/correctAnswerText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Correct Answer: Option 3"
+                    android:textColor="#388E3C"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/descriptionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Explanation: 2 + 2 equals 4."
+                    android:visibility="gone" />
+            </LinearLayout>
+        </ScrollView>
+        <!-- Navigation Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPrevious"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:background="#F01111"
+                android:text="Previous" />
+
+            <Button
+                android:id="@+id/btnPreview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1"
+                android:background="#1D54A9"
+                android:text="Preview" />
+
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:background="#008000"
+                android:text="Next" />
+        </LinearLayout>
     </LinearLayout>
-
-    <!-- Question Text -->
-    <TextView
-        android:id="@+id/questionText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Question will appear here"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:paddingBottom="16dp" />
-
-    <!-- Options Group -->
-    <RadioGroup
-        android:id="@+id/optionsGroup"
-        android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/optionA"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:buttonTint="@color/black"
-            android:text="Option A" />
-
-        <RadioButton
-            android:id="@+id/optionB"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:buttonTint="@color/black"
-            android:text="Option B" />
-
-        <RadioButton
-            android:id="@+id/optionC"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:buttonTint="@color/black"
-            android:text="Option C" />
-
-        <RadioButton
-            android:id="@+id/optionD"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:buttonTint="@color/black"
-            android:text="Option D" />
-    </RadioGroup>
-    </LinearLayout>
-    <!-- Navigation Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        >
-
-
-        <Button
-            android:id="@+id/prevButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="#FF0000"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Previous" />
-        <Space
-            android:layout_width="30dp"
-            android:layout_height="match_parent"/>
-
-        <Button
-            android:id="@+id/previewButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="#34c7f5"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Preview" />
-
-        <Space
-            android:layout_width="30dp"
-            android:layout_height="match_parent"/>
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="#008000"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Next" />
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
