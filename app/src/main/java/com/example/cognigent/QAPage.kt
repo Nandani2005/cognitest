@@ -3,6 +3,7 @@ package com.example.cognigent
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -29,10 +30,10 @@ class QAPage : AppCompatActivity() {
 
     private var currentIndex = 0
     private var attempted = 0
-    private var isSolutionMode = false
+    private var solutionMode = false
 
     private lateinit var timer: CountDownTimer
-    private var timeInMillis = 15 * 60 * 1000L // 15 minutes
+    private var timeInMillis = 15 * 60 * 1000L
 
     data class Question(
         val type: Int,
@@ -46,32 +47,11 @@ class QAPage : AppCompatActivity() {
     )
 
     private val questions = listOf(
-        Question(
-            type = 1,
-            text = "What is 2 + 2?",
-            imageResId = null,
-            options = listOf("3", "4", "5", "6"),
-            correctAnswerIndex = 1,
-            explanation = "2 + 2 = 4"
-        ),
-        Question(
-            type = 2,
-            text = "Identify the fruit",
-            imageResId = R.drawable.ic_launcher_background,
-            options = listOf("Apple", "Banana", "Mango", "Orange"),
-            correctAnswerIndex = 2,
-            explanation = "It's a mango image."
-        ),
-        Question(
-            type = 3,
-            text = "Match the languages with type",
-            imageResId = null,
-            options = listOf("A-1, B-2, C-3", "A-2, B-1, C-3", "A-3, B-2, C-1", "A-1, B-3, C-2"),
-            correctAnswerIndex = 0,
-            explanation = "Java is OOP, Python is scripting, C++ is low level",
+        Question(1, "What is 2 + 2?", null, listOf("3", "4", "5", "6"), 1, "2 + 2 = 4"),
+        Question(2, "Identify the fruit", R.drawable.ic_launcher_background, listOf("Apple", "Banana", "Mango", "Orange"), 2, "It's a mango image."),
+        Question(3, "Match the languages with type", null, listOf("A-1, B-2, C-3", "A-2, B-1, C-3", "A-3, B-2, C-1", "A-1, B-3, C-2"), 0, "Java is OOP, Python is scripting, C++ is low level",
             matchA = listOf("A. Java", "B. Python", "C. C++"),
-            matchB = listOf("1. Object Oriented", "2. Scripting", "3. Low Level")
-        )
+            matchB = listOf("1. Object Oriented", "2. Scripting", "3. Low Level"))
     )
 
     private val selectedAnswers = IntArray(questions.size) { -1 }
@@ -80,8 +60,7 @@ class QAPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qapage)
 
-        isSolutionMode = intent.getBooleanExtra("showSolutions", false)
-
+        // Initialize views
         questionText = findViewById(R.id.questionText)
         questionImage = findViewById(R.id.questionImage)
         optionsGroup = findViewById(R.id.optionsGroup)
@@ -94,15 +73,13 @@ class QAPage : AppCompatActivity() {
         descriptionText = findViewById(R.id.descriptionText)
         attemptedCount = findViewById(R.id.attemptedCount)
         testNo = findViewById(R.id.testno)
+        timerTextView = findViewById(R.id.timer)
         submitButton = findViewById(R.id.submitButton)
         changeLangButton = findViewById(R.id.changeLangButton)
-        timerTextView = TextView(this).apply { textSize = 16f }
 
-        val layout = findViewById<LinearLayout>(R.id.mainContainer)
-        layout.addView(timerTextView, 1)
-
+        // Button handlers
         findViewById<Button>(R.id.btnNext).setOnClickListener {
-            if (!isSolutionMode) saveAnswer()
+            saveAnswer()
             if (currentIndex < questions.size - 1) {
                 currentIndex++
                 loadQuestion()
@@ -110,7 +87,7 @@ class QAPage : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnPrevious).setOnClickListener {
-            if (!isSolutionMode) saveAnswer()
+            saveAnswer()
             if (currentIndex > 0) {
                 currentIndex--
                 loadQuestion()
@@ -118,12 +95,12 @@ class QAPage : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnPreview).setOnClickListener {
-            startActivity(Intent(this, preview::class.java))
+            val itnt = Intent(this, preview::class.java)
+            startActivity(itnt)
         }
 
         submitButton.setOnClickListener {
             timer.cancel()
-            Toast.makeText(this, "Test submitted!", Toast.LENGTH_SHORT).show()
             showResultPopup(70, 100)
         }
 
@@ -131,12 +108,8 @@ class QAPage : AppCompatActivity() {
             showClosePopup()
         }
 
-        if (isSolutionMode) {
-            submitButton.isEnabled = false
-            changeLangButton.isEnabled = false
-        } else {
-            startTimer()
-        }
+        solutionMode = intent.getBooleanExtra("solutionMode", false)
+        if (!solutionMode) startTimer()
 
         loadQuestion()
     }
@@ -146,12 +119,12 @@ class QAPage : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 val min = millisUntilFinished / 60000
                 val sec = (millisUntilFinished % 60000) / 1000
-                timerTextView.text = "Time Left: %02d:%02d".format(min, sec)
+                timerTextView.text = "⏱ %02d:%02d".format(min, sec)
             }
 
             override fun onFinish() {
                 Toast.makeText(this@QAPage, "Time up!", Toast.LENGTH_SHORT).show()
-                finish()
+                showResultPopup(60, 100)
             }
         }.start()
     }
@@ -159,8 +132,8 @@ class QAPage : AppCompatActivity() {
     private fun loadQuestion() {
         val q = questions[currentIndex]
 
-        questionText.text = q.text
         testNo.text = "Test No: 1 | Q${currentIndex + 1}/${questions.size}"
+        questionText.text = q.text
 
         questionImage.isVisible = q.type == 2
         q.imageResId?.let { questionImage.setImageResource(it) }
@@ -189,17 +162,17 @@ class QAPage : AppCompatActivity() {
             3 -> option4.isChecked = true
         }
 
-        // Enable/Disable based on solution mode
-        val enableOptions = !isSolutionMode
-        for (i in 0 until optionsGroup.childCount) {
-            optionsGroup.getChildAt(i).isEnabled = enableOptions
-        }
+        correctAnswerText.isVisible = false
+        descriptionText.isVisible = false
 
-        if (isSolutionMode) {
+        if (solutionMode) {
+            option1.isEnabled = false
+            option2.isEnabled = false
+            option3.isEnabled = false
+            option4.isEnabled = false
+            submitButton.isEnabled = false
+            changeLangButton.isEnabled = false
             showAnswer()
-        } else {
-            correctAnswerText.isVisible = false
-            descriptionText.isVisible = false
         }
 
         attempted = selectedAnswers.count { it != -1 }
@@ -222,10 +195,10 @@ class QAPage : AppCompatActivity() {
 
     private fun showAnswer() {
         val q = questions[currentIndex]
-        correctAnswerText.text = "Correct Answer: ${q.options[q.correctAnswerIndex]}"
-        descriptionText.text = "Explanation: ${q.explanation}"
-        correctAnswerText.isVisible = true
-        descriptionText.isVisible = true
+        correctAnswerText.text = "✅ Correct Answer: ${q.options[q.correctAnswerIndex]}"
+        descriptionText.text = "📘 Explanation: ${q.explanation}"
+        correctAnswerText.visibility = View.VISIBLE
+        descriptionText.visibility = View.VISIBLE
     }
 
     private fun showClosePopup() {
@@ -253,7 +226,7 @@ class QAPage : AppCompatActivity() {
         val btnSeeSolutions = dialogView.findViewById<Button>(R.id.solution)
         val btnGoHome = dialogView.findViewById<Button>(R.id.go_home)
 
-        tvScore.text = "You scored $score out of $total"
+        tvScore.text = "🎯 You scored $score out of $total"
 
         val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_enter)
         dialogView.startAnimation(scaleAnimation)
@@ -266,14 +239,15 @@ class QAPage : AppCompatActivity() {
         btnSeeSolutions.setOnClickListener {
             popup.dismiss()
             val intent = Intent(this, QAPage::class.java)
-            intent.putExtra("showSolutions", true)
+            intent.putExtra("solutionMode", true)
             startActivity(intent)
             finish()
         }
 
         btnGoHome.setOnClickListener {
             popup.dismiss()
-            startActivity(Intent(this, homepage::class.java))
+            val intent = Intent(this, homepage::class.java)
+            startActivity(intent)
             finish()
         }
 
