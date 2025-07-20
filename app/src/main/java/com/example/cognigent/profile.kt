@@ -68,6 +68,15 @@ class profile : AppCompatActivity() {
         logoutBtn.setOnClickListener {
             showLogoutPopup()
         }
+        val deleteBtn = findViewById<TextView>(R.id.deleteId)
+        deleteBtn.setOnClickListener {
+            showLogoutPopup()
+            dbHelper.deleteUserId(email)
+            val intent = Intent(this, loginpage::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
 
     }
     private fun showLogoutPopup() {
