@@ -1,210 +1,283 @@
 package com.example.cognigent
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.view.isVisible
 
 class QAPage : AppCompatActivity() {
 
-    private lateinit var dbHelper: QuestionDatabase
-    private lateinit var questionList: List<QuestionModel>
-    private var currentIndex = 0
-
     private lateinit var questionText: TextView
+    private lateinit var questionImage: ImageView
     private lateinit var optionsGroup: RadioGroup
-    private lateinit var optionA: RadioButton
-    private lateinit var optionB: RadioButton
-    private lateinit var optionC: RadioButton
-    private lateinit var optionD: RadioButton
-    private lateinit var prevBtn: Button
-    private lateinit var nextBtn: Button
-    private lateinit var previewBtn: Button
-    private lateinit var closeBtn: Button
-    private lateinit var testNumber: TextView
-    private lateinit var questionNumber: TextView
-    private lateinit var timerText: TextView
+    private lateinit var option1: RadioButton
+    private lateinit var option2: RadioButton
+    private lateinit var option3: RadioButton
+    private lateinit var option4: RadioButton
+    private lateinit var matchingLayout: LinearLayout
+    private lateinit var correctAnswerText: TextView
+    private lateinit var descriptionText: TextView
+    private lateinit var attemptedCount: TextView
+    private lateinit var testNo: TextView
+    private lateinit var timerTextView: TextView
+    private lateinit var submitButton: Button
+    private lateinit var changeLangButton: Button
 
-    private var totalTimeInMillis: Long = 30 * 60 * 1000 // 30 minutes
-    private lateinit var countDownTimer: CountDownTimer
+    private var currentIndex = 0
+    private var attempted = 0
+    private var isSolutionMode = false
+
+    private lateinit var timer: CountDownTimer
+    private var timeInMillis = 15 * 60 * 1000L // 15 minutes
+
+    data class Question(
+        val type: Int,
+        val text: String,
+        val imageResId: Int?,
+        val options: List<String>,
+        val correctAnswerIndex: Int,
+        val explanation: String,
+        val matchA: List<String>? = null,
+        val matchB: List<String>? = null
+    )
+
+    private val questions = listOf(
+        Question(
+            type = 1,
+            text = "What is 2 + 2?",
+            imageResId = null,
+            options = listOf("3", "4", "5", "6"),
+            correctAnswerIndex = 1,
+            explanation = "2 + 2 = 4"
+        ),
+        Question(
+            type = 2,
+            text = "Identify the fruit",
+            imageResId = R.drawable.ic_launcher_background,
+            options = listOf("Apple", "Banana", "Mango", "Orange"),
+            correctAnswerIndex = 2,
+            explanation = "It's a mango image."
+        ),
+        Question(
+            type = 3,
+            text = "Match the languages with type",
+            imageResId = null,
+            options = listOf("A-1, B-2, C-3", "A-2, B-1, C-3", "A-3, B-2, C-1", "A-1, B-3, C-2"),
+            correctAnswerIndex = 0,
+            explanation = "Java is OOP, Python is scripting, C++ is low level",
+            matchA = listOf("A. Java", "B. Python", "C. C++"),
+            matchB = listOf("1. Object Oriented", "2. Scripting", "3. Low Level")
+        )
+    )
+
+    private val selectedAnswers = IntArray(questions.size) { -1 }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qapage)
-        dbHelper = QuestionDatabase(this)
-        questionList = dbHelper.getQuestionsByExamType("mba")
 
+        isSolutionMode = intent.getBooleanExtra("showSolutions", false)
 
         questionText = findViewById(R.id.questionText)
+        questionImage = findViewById(R.id.questionImage)
         optionsGroup = findViewById(R.id.optionsGroup)
-        optionA = findViewById(R.id.option1)
-        optionB = findViewById(R.id.option2)
-        optionC = findViewById(R.id.option3)
-        optionD = findViewById(R.id.option4)
-        prevBtn = findViewById(R.id.btnPrevious)
-        nextBtn = findViewById(R.id.btnNext)
-        previewBtn = findViewById(R.id.btnPreview)
-        closeBtn = findViewById(R.id.closeButton)
-        testNumber = findViewById(R.id.testno)
-        val attempted = findViewById<TextView>(R.id.attemptedCount)
-        timerText = findViewById(R.id.timer)
+        option1 = findViewById(R.id.option1)
+        option2 = findViewById(R.id.option2)
+        option3 = findViewById(R.id.option3)
+        option4 = findViewById(R.id.option4)
+        matchingLayout = findViewById(R.id.matchingLayout)
+        correctAnswerText = findViewById(R.id.correctAnswerText)
+        descriptionText = findViewById(R.id.descriptionText)
+        attemptedCount = findViewById(R.id.attemptedCount)
+        testNo = findViewById(R.id.testno)
+        submitButton = findViewById(R.id.submitButton)
+        changeLangButton = findViewById(R.id.changeLangButton)
+        timerTextView = TextView(this).apply { textSize = 16f }
 
-        if (questionList.isNotEmpty()) {
-            showQuestion(currentIndex)
-            startTimer()
-        } else {
-            Toast.makeText(this, "No questions found in database.", Toast.LENGTH_LONG).show()
-        }
-        attempted.text = "Attempted: ${questionList.count { it.Attemp != -1 }}"
-        prevBtn.isEnabled = currentIndex > 0
-        nextBtn.isEnabled = currentIndex < questionList.size - 1
-        optionsGroup.setOnCheckedChangeListener { _, checkedId ->
-            val selected = when (checkedId) {
-                R.id.option1 -> 0
-                R.id.option2 -> 1
-                R.id.option3 -> 2
-                R.id.option4 -> 3
-                else -> -1
+        val layout = findViewById<LinearLayout>(R.id.mainContainer)
+        layout.addView(timerTextView, 1)
+
+        findViewById<Button>(R.id.btnNext).setOnClickListener {
+            if (!isSolutionMode) saveAnswer()
+            if (currentIndex < questions.size - 1) {
+                currentIndex++
+                loadQuestion()
             }
-            questionList[currentIndex].Attemp = selected
         }
 
-        prevBtn.setOnClickListener {
+        findViewById<Button>(R.id.btnPrevious).setOnClickListener {
+            if (!isSolutionMode) saveAnswer()
             if (currentIndex > 0) {
                 currentIndex--
-                showQuestion(currentIndex)
+                loadQuestion()
             }
         }
 
-        nextBtn.setOnClickListener {
-            if (currentIndex < questionList.size - 1) {
-                currentIndex++
-                showQuestion(currentIndex)
-            }
+        findViewById<Button>(R.id.btnPreview).setOnClickListener {
+            startActivity(Intent(this, preview::class.java))
         }
 
-        previewBtn.setOnClickListener {
-            val intent = Intent(this, preview::class.java)
-            startActivityForResult(intent, 1001)
+        submitButton.setOnClickListener {
+            timer.cancel()
+            Toast.makeText(this, "Test submitted!", Toast.LENGTH_SHORT).show()
+            showResultPopup(70, 100)
         }
 
-
-
-        closeBtn.setOnClickListener {
-            showLogoutPopup()
-            countDownTimer.cancel()
-            val score = calculateScore()
-            dbHelper.saveResult(score,"MBA")
-            Toast.makeText(this, "Score: $score / ${questionList.size}", Toast.LENGTH_LONG).show()
-            finish()
+        findViewById<ImageButton>(R.id.closeButton).setOnClickListener {
+            showClosePopup()
         }
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
-            val jumpTo = data?.getIntExtra("jumpToQuestion", -1) ?: -1
-            if (jumpTo in questionList.indices) {
-                currentIndex = jumpTo
-                showQuestion(currentIndex)
-            }
+
+        if (isSolutionMode) {
+            submitButton.isEnabled = false
+            changeLangButton.isEnabled = false
+        } else {
+            startTimer()
         }
-    }
 
-    private fun showLogoutPopup() {
-        val inflater = layoutInflater
-        val popupView = inflater.inflate(R.layout.logout_popup, null)
-        val confirmBtn = popupView.findViewById<Button>(R.id.yesButton)
-        val cancelBtn = popupView.findViewById<Button>(R.id.noButton)
-        confirmBtn.setOnClickListener {
-            val intent = Intent(this, loginpage::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-        cancelBtn.setOnClickListener {
-
-        }
-        val popup = PopupWindow(
-            popupView,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            true
-        )
-
-// IMPORTANT: Show the popup
-        popup.showAtLocation(popupView, android.view.Gravity.CENTER, 0, 0)
-        true
-        popup.isFocusable = true
-    }
-    private fun showQuestion(index: Int) {
-        val question = questionList[index]
-
-        questionText.text = question.questionText
-        optionA.text = question.optionA
-        optionB.text = question.optionB
-        optionC.text = question.optionC
-        optionD.text = question.optionD
-
-        questionNumber.text = "Question ${index + 1} of ${questionList.size}"
-        testNumber.text = "Test 1"
-
-        optionsGroup.clearCheck()
-
-        when (question.Attemp) {
-            0 -> optionA.isChecked = true
-            1 -> optionB.isChecked = true
-            2 -> optionC.isChecked = true
-            3 -> optionD.isChecked = true
-        }
-    }
-
-
-    private fun calculateScore(): Int {
-        return questionList.count { it.Attemp == it.correctIndex }
+        loadQuestion()
     }
 
     private fun startTimer() {
-        countDownTimer = object : CountDownTimer(totalTimeInMillis, 1000) {
+        timer = object : CountDownTimer(timeInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                val minutes = millisUntilFinished / 60000
-                val seconds = (millisUntilFinished % 60000) / 1000
-                timerText.text = String.format("Time Left: %02d:%02d", minutes, seconds)
+                val min = millisUntilFinished / 60000
+                val sec = (millisUntilFinished % 60000) / 1000
+                timerTextView.text = "Time Left: %02d:%02d".format(min, sec)
             }
 
             override fun onFinish() {
-                val score = calculateScore()
-                dbHelper.saveResult(score,"BCA")
-                timerText.text = "Time's up!"
-                disableOptions()
-
-                AlertDialog.Builder(this@QAPage)
-                    .setTitle("Time's Up!")
-                    .setMessage("Your Score: $score / ${questionList.size}")
-                    .setPositiveButton("OK") { _, _ -> finish() }
-                    .setCancelable(false)
-                    .show()
+                Toast.makeText(this@QAPage, "Time up!", Toast.LENGTH_SHORT).show()
+                finish()
             }
-        }
-        countDownTimer.start()
+        }.start()
     }
 
-    private fun disableOptions() {
+    private fun loadQuestion() {
+        val q = questions[currentIndex]
+
+        questionText.text = q.text
+        testNo.text = "Test No: 1 | Q${currentIndex + 1}/${questions.size}"
+
+        questionImage.isVisible = q.type == 2
+        q.imageResId?.let { questionImage.setImageResource(it) }
+
+        matchingLayout.isVisible = q.type == 3
+        if (q.type == 3) {
+            findViewById<TextView>(R.id.matchItemA1).text = q.matchA?.get(0)
+            findViewById<TextView>(R.id.matchItemA2).text = q.matchA?.get(1)
+            findViewById<TextView>(R.id.matchItemA3).text = q.matchA?.get(2)
+            findViewById<TextView>(R.id.matchItemB1).text = q.matchB?.get(0)
+            findViewById<TextView>(R.id.matchItemB2).text = q.matchB?.get(1)
+            findViewById<TextView>(R.id.matchItemB3).text = q.matchB?.get(2)
+        }
+
+        val options = q.options
+        option1.text = options[0]
+        option2.text = options[1]
+        option3.text = options[2]
+        option4.text = options[3]
+
+        optionsGroup.clearCheck()
+        when (selectedAnswers[currentIndex]) {
+            0 -> option1.isChecked = true
+            1 -> option2.isChecked = true
+            2 -> option3.isChecked = true
+            3 -> option4.isChecked = true
+        }
+
+        // Enable/Disable based on solution mode
+        val enableOptions = !isSolutionMode
         for (i in 0 until optionsGroup.childCount) {
-            optionsGroup.getChildAt(i).isEnabled = false
+            optionsGroup.getChildAt(i).isEnabled = enableOptions
         }
-        prevBtn.isEnabled = false
-        nextBtn.isEnabled = false
-        previewBtn.isEnabled = false
+
+        if (isSolutionMode) {
+            showAnswer()
+        } else {
+            correctAnswerText.isVisible = false
+            descriptionText.isVisible = false
+        }
+
+        attempted = selectedAnswers.count { it != -1 }
+        attemptedCount.text = "Attempted: $attempted/${questions.size}"
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (::countDownTimer.isInitialized) {
-            countDownTimer.cancel()
+    private fun saveAnswer() {
+        val selectedId = optionsGroup.checkedRadioButtonId
+        val answer = when (selectedId) {
+            R.id.option1 -> 0
+            R.id.option2 -> 1
+            R.id.option3 -> 2
+            R.id.option4 -> 3
+            else -> -1
         }
+        if (answer != -1) {
+            selectedAnswers[currentIndex] = answer
+        }
+    }
+
+    private fun showAnswer() {
+        val q = questions[currentIndex]
+        correctAnswerText.text = "Correct Answer: ${q.options[q.correctAnswerIndex]}"
+        descriptionText.text = "Explanation: ${q.explanation}"
+        correctAnswerText.isVisible = true
+        descriptionText.isVisible = true
+    }
+
+    private fun showClosePopup() {
+        val dialogView = layoutInflater.inflate(R.layout.close_popup, null)
+        val popup = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        dialogView.findViewById<Button>(R.id.yesButton).setOnClickListener {
+            popup.dismiss()
+            finish()
+        }
+
+        dialogView.findViewById<Button>(R.id.noButton).setOnClickListener {
+            popup.dismiss()
+        }
+
+        popup.show()
+    }
+
+    private fun showResultPopup(score: Int, total: Int) {
+        val dialogView = layoutInflater.inflate(R.layout.result_popup, null)
+        val tvScore = dialogView.findViewById<TextView>(R.id.score)
+        val btnSeeSolutions = dialogView.findViewById<Button>(R.id.solution)
+        val btnGoHome = dialogView.findViewById<Button>(R.id.go_home)
+
+        tvScore.text = "You scored $score out of $total"
+
+        val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_enter)
+        dialogView.startAnimation(scaleAnimation)
+
+        val popup = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        btnSeeSolutions.setOnClickListener {
+            popup.dismiss()
+            val intent = Intent(this, QAPage::class.java)
+            intent.putExtra("showSolutions", true)
+            startActivity(intent)
+            finish()
+        }
+
+        btnGoHome.setOnClickListener {
+            popup.dismiss()
+            startActivity(Intent(this, homepage::class.java))
+            finish()
+        }
+
+        popup.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        popup.show()
     }
 }
