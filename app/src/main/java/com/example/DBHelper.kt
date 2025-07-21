@@ -85,6 +85,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "users.db", null, 1
         return rowsUpdated > 0
     }
 
+    //delete id
+    fun deleteUserId(email: String): Boolean {
+        val db = writableDatabase
+        val result = db.delete("users", "email = ?", arrayOf(email))
+        db.close()
+        return result > 0
+    }
+
+
+
     // Get user name and course by email
     fun getUserNameAndCourse(email: String): Pair<String, String>? {
         val db = readableDatabase

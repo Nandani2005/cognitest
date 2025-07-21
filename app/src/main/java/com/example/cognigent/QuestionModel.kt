@@ -1,13 +1,14 @@
 package com.example.cognigent
 
 data class QuestionModel(
-    val id: Int,
-    val examType: String,
-    val questionText: String,
-    val optionA: String,
-    val optionB: String,
-    val optionC: String,
-    val optionD: String,
-    val correctIndex: Int,
-    var Attemp: Int = -1
+    var type: Int,
+    var text: String,
+    var imageResId: Int?,
+    var options: List<String>,
+    var correctIndex: Int,
+    var explanation: String,
+    var matchA: List<String>? = null,
+    var matchB: List<String>? = null,
+    var SelectedIndex: Int = -1,
+    var Attemp: Int = 0
 )

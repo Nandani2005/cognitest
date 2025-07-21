@@ -33,28 +33,11 @@ class QAPage : AppCompatActivity() {
     private var solutionMode = false
 
     private lateinit var timer: CountDownTimer
-    private var timeInMillis = 15 * 60 * 1000L
-
-    data class Question(
-        val type: Int,
-        val text: String,
-        val imageResId: Int?,
-        val options: List<String>,
-        val correctAnswerIndex: Int,
-        val explanation: String,
-        val matchA: List<String>? = null,
-        val matchB: List<String>? = null
-    )
-
-    private val questions = listOf(
-        Question(1, "What is 2 + 2?", null, listOf("3", "4", "5", "6"), 1, "2 + 2 = 4"),
-        Question(2, "Identify the fruit", R.drawable.ic_launcher_background, listOf("Apple", "Banana", "Mango", "Orange"), 2, "It's a mango image."),
-        Question(3, "Match the languages with type", null, listOf("A-1, B-2, C-3", "A-2, B-1, C-3", "A-3, B-2, C-1", "A-1, B-3, C-2"), 0, "Java is OOP, Python is scripting, C++ is low level",
-            matchA = listOf("A. Java", "B. Python", "C. C++"),
-            matchB = listOf("1. Object Oriented", "2. Scripting", "3. Low Level"))
-    )
-
+    val helper = QuestionDatabase(this)
+    private val questions = helper.sampleQuestions
+    private var timeInMillis = questions.size * 2*60 * 1000L
     private val selectedAnswers = IntArray(questions.size) { -1 }
+    public val atdArray = IntArray(questions.size) {0}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,13 +78,20 @@ class QAPage : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnPreview).setOnClickListener {
-            val itnt = Intent(this, preview::class.java)
-            startActivity(itnt)
+            saveAnswer()
+            val intent = Intent(this, preview::class.java)
+            intent.putExtra("arr",atdArray)
+            startActivityForResult(intent, 1)
         }
 
         submitButton.setOnClickListener {
+            saveAnswer()
             timer.cancel()
-            showResultPopup(70, 100)
+            val score = calculateScore()
+//            helper.saveResult(score, "general")
+//            helper.resetUserAnswers()
+            showResultPopup(score, questions.size)
+
         }
 
         findViewById<ImageButton>(R.id.closeButton).setOnClickListener {
@@ -131,7 +121,6 @@ class QAPage : AppCompatActivity() {
 
     private fun loadQuestion() {
         val q = questions[currentIndex]
-
         testNo.text = "Test No: 1 | Q${currentIndex + 1}/${questions.size}"
         questionText.text = q.text
 
@@ -155,12 +144,15 @@ class QAPage : AppCompatActivity() {
         option4.text = options[3]
 
         optionsGroup.clearCheck()
-        when (selectedAnswers[currentIndex]) {
-            0 -> option1.isChecked = true
-            1 -> option2.isChecked = true
-            2 -> option3.isChecked = true
-            3 -> option4.isChecked = true
-        }
+
+
+            when (selectedAnswers[currentIndex]) {
+                0 -> option1.isChecked = true
+                1 -> option2.isChecked = true
+                2 -> option3.isChecked = true
+                3 -> option4.isChecked = true
+            }
+
 
         correctAnswerText.isVisible = false
         descriptionText.isVisible = false
@@ -178,8 +170,21 @@ class QAPage : AppCompatActivity() {
         attempted = selectedAnswers.count { it != -1 }
         attemptedCount.text = "Attempted: $attempted/${questions.size}"
     }
+    private fun calculateScore(): Int {
+        var score = 0
+        for (i in 0 until questions.size) {
+            if (selectedAnswers[i] == questions[i].correctIndex) {
+                score++
+            }
+        }
+        return score
+    }
 
     private fun saveAnswer() {
+        if(option1.isChecked||option2.isChecked||option3.isChecked||option4.isChecked) {
+            questions[currentIndex].Attemp = 1
+            atdArray[currentIndex] = 1
+        }
         val selectedId = optionsGroup.checkedRadioButtonId
         val answer = when (selectedId) {
             R.id.option1 -> 0
@@ -188,14 +193,14 @@ class QAPage : AppCompatActivity() {
             R.id.option4 -> 3
             else -> -1
         }
-        if (answer != -1) {
+        questions[currentIndex].SelectedIndex=answer
             selectedAnswers[currentIndex] = answer
         }
-    }
+
 
     private fun showAnswer() {
         val q = questions[currentIndex]
-        correctAnswerText.text = "✅ Correct Answer: ${q.options[q.correctAnswerIndex]}"
+        correctAnswerText.text = "✅ Correct Answer: ${q.options[q.correctIndex]}"
         descriptionText.text = "📘 Explanation: ${q.explanation}"
         correctAnswerText.visibility = View.VISIBLE
         descriptionText.visibility = View.VISIBLE
@@ -225,7 +230,6 @@ class QAPage : AppCompatActivity() {
         val tvScore = dialogView.findViewById<TextView>(R.id.score)
         val btnSeeSolutions = dialogView.findViewById<Button>(R.id.solution)
         val btnGoHome = dialogView.findViewById<Button>(R.id.go_home)
-
         tvScore.text = "🎯 You scored $score out of $total"
 
         val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_enter)
@@ -254,4 +258,15 @@ class QAPage : AppCompatActivity() {
         popup.window?.setBackgroundDrawableResource(android.R.color.transparent)
         popup.show()
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            val selectedIndex = data?.getIntExtra("selected_question_index", -1) ?: -1
+            if (selectedIndex in questions.indices) {
+                currentIndex = selectedIndex
+                loadQuestion()
+            }
+        }
+    }
+
 }

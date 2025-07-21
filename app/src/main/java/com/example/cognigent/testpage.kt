@@ -22,16 +22,18 @@ class testpage : AppCompatActivity() {
         s_name.text=("Subject:${intent.getStringExtra("subjectName")}")
         val trs = Intent(this , declaration::class.java)
         close.setOnClickListener {
-            val tr = Intent(this, homepage::class.java)
-            startActivity(tr)
+            finish()
         }
         start1.setOnClickListener {
+            trs.putExtra("testNo", "text 1")
             startActivity(trs)
         }
         start2.setOnClickListener {
+            trs.putExtra("testNo", "text 2")
             startActivity(trs)
         }
         start3.setOnClickListener {
+            trs.putExtra("testNo", "text 3")
             startActivity(trs)
         }
 

@@ -17,15 +17,16 @@ class declaration : AppCompatActivity() {
         val close= findViewById<Button>(R.id.closetab)
         val chkbox = findViewById<CheckBox>(R.id.checkbox)
         val startbtn = findViewById<Button>(R.id.startbtn)
+        val testNo = intent.getStringExtra("testNo")
 
         close.setOnClickListener {
-            val tr = Intent(this, testpage::class.java)
-            startActivity(tr)
+           finish()
         }
         startbtn.setOnClickListener {
 
             if (chkbox.isChecked == true) {
                 val trf= Intent(this, QAPage::class.java)
+                trf.putExtra("testNO", testNo)
                 startActivity(trf)
             } else {
                 Toast.makeText(this, "Please tick the CheckBox", Toast.LENGTH_SHORT).show()

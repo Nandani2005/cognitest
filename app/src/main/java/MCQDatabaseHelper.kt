@@ -40,27 +40,27 @@ class MCQDatabaseHelper(context: Context) :
         writableDatabase.insert("questions", null, values)
     }
 
-    fun getAllQuestions(): List<QuestionModel> {
-        val list = mutableListOf<QuestionModel>()
-        val cursor = readableDatabase.rawQuery("SELECT * FROM questions", null)
-        if (cursor.moveToFirst()) {
-            do {
-                val question = QuestionModel(
-                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                    questionText = cursor.getString(cursor.getColumnIndexOrThrow("questionText")),
-                    optionA = cursor.getString(cursor.getColumnIndexOrThrow("optionA")),
-                    optionB = cursor.getString(cursor.getColumnIndexOrThrow("optionB")),
-                    optionC = cursor.getString(cursor.getColumnIndexOrThrow("optionC")),
-                    optionD = cursor.getString(cursor.getColumnIndexOrThrow("optionD")),
-                    correctIndex = cursor.getInt(cursor.getColumnIndexOrThrow("correctIndex")),
-                    selectedIndex = cursor.getInt(cursor.getColumnIndexOrThrow("selectedIndex"))
-                )
-                list.add(question)
-            } while (cursor.moveToNext())
-        }
-        cursor.close()
-        return list
-    }
+//    fun getAllQuestions(): List<QuestionModel> {
+//        val list = mutableListOf<QuestionModel>()
+//        val cursor = readableDatabase.rawQuery("SELECT * FROM questions", null)
+//        if (cursor.moveToFirst()) {
+//            do {
+//                val question = QuestionModel(
+//                    id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+//                    questionText = cursor.getString(cursor.getColumnIndexOrThrow("questionText")),
+//                    optionA = cursor.getString(cursor.getColumnIndexOrThrow("optionA")),
+//                    optionB = cursor.getString(cursor.getColumnIndexOrThrow("optionB")),
+//                    optionC = cursor.getString(cursor.getColumnIndexOrThrow("optionC")),
+//                    optionD = cursor.getString(cursor.getColumnIndexOrThrow("optionD")),
+//                    correctIndex = cursor.getInt(cursor.getColumnIndexOrThrow("correctIndex")),
+//                    selectedIndex = cursor.getInt(cursor.getColumnIndexOrThrow("selectedIndex"))
+//                )
+//                list.add(question)
+//            } while (cursor.moveToNext())
+//        }
+//        cursor.close()
+//        return list
+//    }
 
     fun saveStudentResponse(questionId: Int, selectedIndex: Int) {
         val values = ContentValues().apply {

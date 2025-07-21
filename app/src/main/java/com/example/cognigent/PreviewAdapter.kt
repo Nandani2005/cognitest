@@ -1,24 +1,27 @@
 package com.example.cognigent
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cognigent.QuestionDatabase
-import com.example.cognigent.QuestionModel
-import com.example.cognigent.R
 
 class PreviewAdapter(
-    private val questionList: List<QuestionModel>
-
+    private val activity: Activity ,// To return result
+    private var array: IntArray
 ) : RecyclerView.Adapter<PreviewAdapter.ViewHolder>() {
-    var marks=0;
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val optionImg: ImageView = view.findViewById(R.id.resultIcon)
-        val qNo: TextView = view.findViewById(R.id.questionNumber)
 
+    // Fetch all questions from the database
+    val dbHelper = QuestionDatabase(this.activity)
+    private val questionList = dbHelper.sampleQuestions
+
+     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val optionImg: ImageView = view.findViewById(R.id.resultIcon)
+        val cardHolder: View = view.findViewById(R.id.cardholder)
+        val qNo: TextView = view.findViewById(R.id.questionNumber)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,27 +32,35 @@ class PreviewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val question = questionList[position]
+
+        // Set question number
         holder.qNo.text = "${position + 1}"
 
+        if(array[position]==1){
+            holder.optionImg.setImageResource(R.drawable.ic_check)   // ✅
+        }else{
+            holder.optionImg.setImageResource(R.drawable.ic_cross)   // ❌
+        }
 
-        when {
-            question.Attemp == -1 -> {
-                holder.optionImg.setImageResource(R.drawable.ic_cross)
-            }
-            question.Attemp == question.correctIndex -> {
+//        if (question.Attemp==1) {
+//            holder.optionImg.setImageResource(R.drawable.ic_check)   // ✅
+//        } else {
+//            holder.optionImg.setImageResource(R.drawable.ic_cross)   // ❌
+//        }
 
-                holder.optionImg.setImageResource(R.drawable.ic_check)
-                marks++;
+
+
+        // 4️⃣  When tapped, jump back to that question in QAPage
+        holder.cardHolder.setOnClickListener {
+            val resultIntent = Intent().apply {
+                putExtra("selected_question_index", position)
             }
-            else -> {
-                holder.optionImg.setImageResource(R.drawable.ic_check)
-            }
+            activity.setResult(Activity.RESULT_OK, resultIntent)
+            activity.finish()
         }
     }
 
-    override fun getItemCount(): Int = questionList.size
+    override fun getItemCount(): Int {
+        return questionList.size
+    }
 }
-
-
-
-

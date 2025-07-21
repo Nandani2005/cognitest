@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.text.SimpleDateFormat
 import java.util.*
+import java.security.MessageDigest
 
 class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", null, 1) {
 
@@ -14,13 +15,17 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
             CREATE TABLE questions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 examType TEXT NOT NULL,
+                type INTEGER DEFAULT 1,
                 question TEXT NOT NULL,
+                explanation TEXT,
+                imageResId INTEGER DEFAULT 0,
                 optionA TEXT NOT NULL,
                 optionB TEXT NOT NULL,
                 optionC TEXT NOT NULL,
                 optionD TEXT NOT NULL,
                 correctAnswer INTEGER NOT NULL,
-                userAnswer INTEGER DEFAULT -1
+                selectedIndex INTEGER DEFAULT -1,
+                Attemp INTEGER DEFAULT 0
             )
         """.trimIndent())
 
@@ -33,7 +38,7 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
             )
         """.trimIndent())
 
-        insertSampleQuestions(db)
+//        insertSampleQuestions(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -42,54 +47,65 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
         onCreate(db)
     }
 
-    private fun insertSampleQuestions(db: SQLiteDatabase) {
         val sampleQuestions = listOf(
-            QuestionModel(1, "BCA", "What is the capital of France?", "London", "Berlin", "Paris", "Rome", 2),
-            QuestionModel(2, "BCA", "Which number is even?", "3", "7", "10", "5", 2),
-            QuestionModel(3, "MBA", "Which one is a fruit?", "Potato", "Carrot", "Banana", "Onion", 2),
-            QuestionModel(4, "MBA", "What is the square root of 16?", "2", "4", "8", "6", 1),
+            QuestionModel(1, "What is the largest planet in our Solar System?", null,
+                listOf("Earth", "Mars", "Jupiter", "Saturn"), 2,
+                "Jupiter is the largest planet in our Solar System."),
+            QuestionModel(1, "Who invented the telephone?", null,
+                listOf("Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Isaac Newton"), 0,
+                "Alexander Graham Bell is credited with inventing the telephone."),
+            QuestionModel(
+                2, "What is the capital of France?", R.drawable.acc_logo,
+                listOf("Berlin", "Madrid", "Paris", "Rome"), 2,
+                "Paris is the capital of France."
+            ),
+            QuestionModel(1, "Which continent is the Sahara Desert located on?", null,
+                listOf("Asia", "South America", "Africa", "Australia"), 2,
+                "The Sahara Desert is located in northern Africa.") ,
+                    QuestionModel(3, "Match the languages with type", null, listOf("A-1, B-2, C-3", "A-2, B-1, C-3", "A-3, B-2, C-1", "A-1, B-3, C-2"), 0, "Java is OOP, Python is scripting, C++ is low level",
+            matchA = listOf("A. Java", "B. Python", "C. C++"),
+            matchB = listOf("1. Object Oriented", "2. Scripting", "3. Low Level"))
         )
 
-        for (q in sampleQuestions) {
-            val values = ContentValues().apply {
-                put("examType", q.examType)
-                put("question", q.questionText)
-                put("optionA", q.optionA)
-                put("optionB", q.optionB)
-                put("optionC", q.optionC)
-                put("optionD", q.optionD)
-                put("correctAnswer", q.correctIndex)
-                put("userAnswer", -1)
-            }
-            db.insert("questions", null, values)
-        }
-    }
 
-    fun getQuestionsByExamType(examType: String): List<QuestionModel> {
-        val questionList = mutableListOf<QuestionModel>()
+    fun getAllQuestions(): List<QuestionModel> {
         val db = readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM questions WHERE examType = ?", arrayOf(examType))
+        val questionList = mutableListOf<QuestionModel>()
+        val cursor = db.rawQuery("SELECT * FROM questions", null)
 
         if (cursor.moveToFirst()) {
             do {
-                questionList.add(
-                    QuestionModel(
-                        id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
-                        examType = cursor.getString(cursor.getColumnIndexOrThrow("examType")),
-                        questionText = cursor.getString(cursor.getColumnIndexOrThrow("question")),
-                        optionA = cursor.getString(cursor.getColumnIndexOrThrow("optionA")),
-                        optionB = cursor.getString(cursor.getColumnIndexOrThrow("optionB")),
-                        optionC = cursor.getString(cursor.getColumnIndexOrThrow("optionC")),
-                        optionD = cursor.getString(cursor.getColumnIndexOrThrow("optionD")),
-                        correctIndex = cursor.getInt(cursor.getColumnIndexOrThrow("correctAnswer")),
-                        Attemp = cursor.getInt(cursor.getColumnIndexOrThrow("userAnswer"))
-                    )
+                val question = QuestionModel(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("type")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("question")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("imageResId")).takeIf { it != 0 },
+                    listOf(
+                        cursor.getString(cursor.getColumnIndexOrThrow("optionA")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("optionB")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("optionC")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("optionD"))
+                    ),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("correctAnswer")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("explanation")),
+                    null, null,
+                    cursor.getInt(cursor.getColumnIndexOrThrow("selectedIndex")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("Attemp"))
                 )
+                questionList.add(question)
             } while (cursor.moveToNext())
         }
-
         cursor.close()
+        db.close()
         return questionList
+    }
+
+    fun updateAttempt(id: Int, attemp: Int, selectedIndex: Int) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("Attemp", attemp)
+            put("selectedIndex", selectedIndex)
+        }
+        db.update("questions", values, "id = ?", arrayOf(id.toString()))
     }
 
     fun saveUserAnswer(questionId: Int, selectedIndex: Int) {
@@ -104,17 +120,15 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
         val db = writableDatabase
         val values = ContentValues().apply {
             put("userAnswer", -1)
+            put("selectedIndex", -1)
+            put("Attemp", 0)
         }
         db.update("questions", values, null, null)
     }
 
-    fun calculateScore(examType: String): Int {
+    fun calculateScore(): Int {
         val db = readableDatabase
-        val cursor = db.rawQuery(
-            "SELECT correctAnswer, userAnswer FROM questions WHERE examType = ?",
-            arrayOf(examType)
-        )
-
+        val cursor = db.rawQuery("SELECT correctAnswer, selectedIndex FROM questions", null)
         var score = 0
         if (cursor.moveToFirst()) {
             do {
@@ -123,7 +137,7 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
                 if (user == correct) score++
             } while (cursor.moveToNext())
         }
-
+       db.close()
         cursor.close()
         return score
     }
@@ -136,6 +150,7 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
             put("timestamp", SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
         }
         db.insert("results", null, values)
+        db.close()
     }
 
     fun getAllResults(): List<Triple<String, Int, String>> {
@@ -156,8 +171,10 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
         }
 
         cursor.close()
+        db.close()
         return results
     }
+
     fun insertQuestion(
         examType: String,
         questionText: String,
@@ -178,12 +195,13 @@ class QuestionDatabase(context: Context) : SQLiteOpenHelper(context, "quiz.db", 
             put("correctAnswer", correctIndex)
             put("userAnswer", -1)
         }
+        db.close()
         return db.insert("questions", null, values)
     }
     fun deleteQuestion(id: Int): Int {
         val db = writableDatabase
-        return db.delete("questions", "id = ?", arrayOf(id.toString()))
+        val s= db.delete("questions", "id = ?", arrayOf(id.toString()))
+        db.close()
+        return s
     }
-
-
 }

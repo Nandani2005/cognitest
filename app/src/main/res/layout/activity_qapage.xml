@@ -262,7 +262,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Correct Answer: Option 3"
-                    android:textColor="#388E3C"
+                    android:textColor="#3D9A41"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
