@@ -36,15 +36,9 @@ class profile : AppCompatActivity() {
             })
         }
 
-        findViewById<ImageView>(R.id.nav_result).setOnClickListener {
-            startActivity(Intent(this, notification::class.java).apply {
-                putExtra("email", email)
-            })
-        }
 
-        findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
-            // Already in profile, optionally show a toast or do nothing
-        }
+
+
 
         findViewById<ImageView>(R.id.nav_home).setOnClickListener {
             startActivity(Intent(this, homepage::class.java).apply {

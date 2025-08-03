@@ -35,9 +35,7 @@
         <activity
             android:name=".loginpage"
             android:exported="false" />
-        <activity
-            android:name=".notification"
-            android:exported="false" />
+
         <activity
             android:name=".preview"
             android:exported="false" />

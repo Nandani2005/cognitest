@@ -35,9 +35,9 @@ class QAPage : AppCompatActivity() {
     private lateinit var timer: CountDownTimer
     val helper = QuestionDatabase(this)
     private val questions = helper.sampleQuestions
-    private var timeInMillis = questions.size * 2*60 * 1000L
+    private var timeInMillis = questions.size * 2 * 60 * 1000L
     private val selectedAnswers = IntArray(questions.size) { -1 }
-    public val atdArray = IntArray(questions.size) {0}
+    private val atdArray = IntArray(questions.size) { 0 }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +80,7 @@ class QAPage : AppCompatActivity() {
         findViewById<Button>(R.id.btnPreview).setOnClickListener {
             saveAnswer()
             val intent = Intent(this, preview::class.java)
-            intent.putExtra("arr",atdArray)
+            intent.putExtra("arr", atdArray)
             startActivityForResult(intent, 1)
         }
 
@@ -88,10 +88,7 @@ class QAPage : AppCompatActivity() {
             saveAnswer()
             timer.cancel()
             val score = calculateScore()
-//            helper.saveResult(score, "general")
-//            helper.resetUserAnswers()
             showResultPopup(score, questions.size)
-
         }
 
         findViewById<ImageButton>(R.id.closeButton).setOnClickListener {
@@ -114,7 +111,7 @@ class QAPage : AppCompatActivity() {
 
             override fun onFinish() {
                 Toast.makeText(this@QAPage, "Time up!", Toast.LENGTH_SHORT).show()
-                showResultPopup(60, 100)
+                showResultPopup(calculateScore(), questions.size)
             }
         }.start()
     }
@@ -144,15 +141,12 @@ class QAPage : AppCompatActivity() {
         option4.text = options[3]
 
         optionsGroup.clearCheck()
-
-
-            when (selectedAnswers[currentIndex]) {
-                0 -> option1.isChecked = true
-                1 -> option2.isChecked = true
-                2 -> option3.isChecked = true
-                3 -> option4.isChecked = true
-            }
-
+        when (selectedAnswers[currentIndex]) {
+            0 -> option1.isChecked = true
+            1 -> option2.isChecked = true
+            2 -> option3.isChecked = true
+            3 -> option4.isChecked = true
+        }
 
         correctAnswerText.isVisible = false
         descriptionText.isVisible = false
@@ -170,9 +164,10 @@ class QAPage : AppCompatActivity() {
         attempted = selectedAnswers.count { it != -1 }
         attemptedCount.text = "Attempted: $attempted/${questions.size}"
     }
+
     private fun calculateScore(): Int {
         var score = 0
-        for (i in 0 until questions.size) {
+        for (i in questions.indices) {
             if (selectedAnswers[i] == questions[i].correctIndex) {
                 score++
             }
@@ -181,8 +176,7 @@ class QAPage : AppCompatActivity() {
     }
 
     private fun saveAnswer() {
-        if(option1.isChecked||option2.isChecked||option3.isChecked||option4.isChecked) {
-            questions[currentIndex].Attemp = 1
+        if (option1.isChecked || option2.isChecked || option3.isChecked || option4.isChecked) {
             atdArray[currentIndex] = 1
         }
         val selectedId = optionsGroup.checkedRadioButtonId
@@ -193,10 +187,8 @@ class QAPage : AppCompatActivity() {
             R.id.option4 -> 3
             else -> -1
         }
-        questions[currentIndex].SelectedIndex=answer
-            selectedAnswers[currentIndex] = answer
-        }
-
+        selectedAnswers[currentIndex] = answer
+    }
 
     private fun showAnswer() {
         val q = questions[currentIndex]
@@ -215,6 +207,7 @@ class QAPage : AppCompatActivity() {
 
         dialogView.findViewById<Button>(R.id.yesButton).setOnClickListener {
             popup.dismiss()
+            startActivity(Intent(this, homepage::class.java))
             finish()
         }
 
@@ -230,6 +223,7 @@ class QAPage : AppCompatActivity() {
         val tvScore = dialogView.findViewById<TextView>(R.id.score)
         val btnSeeSolutions = dialogView.findViewById<Button>(R.id.solution)
         val btnGoHome = dialogView.findViewById<Button>(R.id.go_home)
+
         tvScore.text = "🎯 You scored $score out of $total"
 
         val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_enter)
@@ -250,14 +244,14 @@ class QAPage : AppCompatActivity() {
 
         btnGoHome.setOnClickListener {
             popup.dismiss()
-            val intent = Intent(this, homepage::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, homepage::class.java))
             finish()
         }
 
         popup.window?.setBackgroundDrawableResource(android.R.color.transparent)
         popup.show()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == RESULT_OK) {
@@ -268,5 +262,4 @@ class QAPage : AppCompatActivity() {
             }
         }
     }
-
 }

@@ -2,8 +2,9 @@ package com.example.cognigent
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.DBHelper
 
@@ -18,54 +19,52 @@ class coursePage : AppCompatActivity() {
         val email = intent.getStringExtra("email") ?: ""
         dbHelper = DBHelper(this)
 
-        // Fetch user data from DB
-        val user = dbHelper.getUserNameAndCourse(email)
-        val name = user?.first ?: ""
 
         val welcomeText = findViewById<TextView>(R.id.welcomeText)
-        val spinner = findViewById<Spinner>(R.id.courseSpinner)
-        val proceedBtn = findViewById<Button>(R.id.proceedBtn)
+        val bcaCard = findViewById<LinearLayout>(R.id.bca)
+        val mcaCard = findViewById<LinearLayout>(R.id.mca)
+        val bbaCard = findViewById<LinearLayout>(R.id.bba)
+        val mbaCard = findViewById<LinearLayout>(R.id.mba)
 
-        if (name.isNotEmpty()) {
-            welcomeText.text = "Welcome, $name!"
+
+        updateWelcomeMessage(email, welcomeText)
+
+
+        setCourseClickListener(bcaCard, "BCA", email)
+        setCourseClickListener(mcaCard, "MCA", email)
+        setCourseClickListener(bbaCard, "BBA", email)
+        setCourseClickListener(mbaCard, "MBA", email)
+    }
+
+
+    private fun updateWelcomeMessage(email: String, welcomeText: TextView) {
+        val user = dbHelper.getUserNameAndCourse(email)
+        if (user != null && user.first.isNotEmpty()) {
+            welcomeText.text = "Welcome, ${user.first}!"
         } else {
             welcomeText.text = "Welcome!"
             Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        val courses = listOf("Select Course", "BCA", "MCA", "BBA", "MBA")
-        val adapter = ArrayAdapter(this, R.layout.spinner_selected_item, courses)
-        adapter.setDropDownViewResource(R.layout.spinner_item)
-        spinner.adapter = adapter
 
-        var selectedCourse = "Select Course"
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                selectedCourse = courses[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                selectedCourse = "Select Course"
-            }
-        }
-
-        proceedBtn.setOnClickListener {
-            if (selectedCourse == "Select Course") {
-                Toast.makeText(this, "Please select a course", Toast.LENGTH_SHORT).show()
+    private fun setCourseClickListener(card: LinearLayout, course: String, email: String) {
+        card.setOnClickListener {
+            if (dbHelper.updateCourse(email, course)) {
+                navigateToHome(email, course)
             } else {
-                val success = dbHelper.updateCourse(email, selectedCourse)
-                if (success) {
-                    val intent = Intent(this, homepage::class.java)
-                    intent.putExtra("email", email)
-                    intent.putExtra("selectedCourse", selectedCourse)
-
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Toast.makeText(this, "Failed to save course. Please try again.", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(this, "Failed to save course. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+
+    private fun navigateToHome(email: String, course: String) {
+        val intent = Intent(this , homepage::class.java).apply {
+            putExtra("email", email)
+            putExtra("selectedCourse", course)
+        }
+        startActivity(intent)
+        finish()
     }
 }
