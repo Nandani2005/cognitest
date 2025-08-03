@@ -1,14 +1,15 @@
 package com.example.cognigent
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,48 +20,56 @@ class homepage : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var items: itemAdaptor
     private lateinit var dbHelper: DBHelper
+    private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
 
-        // ✅ Initialize DBHelper
         dbHelper = DBHelper(this)
+        prefs = getSharedPreferences("UserProfile", MODE_PRIVATE)
 
-        // ✅ Get email from intent
-        val email = intent.getStringExtra("email") ?: ""
-        val selectedCourse = intent.getStringExtra("selectedCourse") ?: ""
-        // ✅ Get user details from DB
+        // ✅ Get data from Intent or SharedPreferences
+        var email = intent.getStringExtra("email") ?: prefs.getString("email", "") ?: ""
+        val selectedCourseIntent = intent.getStringExtra("selectedCourse")
         val user = dbHelper.getUserNameAndCourse(email)
-        val name = user?.first ?: "User"
-        val course = user?.second?.uppercase() ?: ""
 
-        // ✅ Set welcome name
+        val name = user?.first ?: prefs.getString("name", "User")!!
+        val course = user?.second?.uppercase() ?: selectedCourseIntent?.uppercase()
+        ?: prefs.getString("course", "")!!
+
+        // ✅ Save fallback data for persistence
+        prefs.edit()
+            .putString("email", email)
+            .putString("name", name)
+            .putString("course", course)
+            .apply()
+
+        // ✅ Display name
         findViewById<TextView>(R.id.username).text = name
 
-        // ✅ Setup navigation
+        // ✅ Setup navigation buttons
         findViewById<ImageView>(R.id.nav_progress).setOnClickListener {
-            val intent1=Intent(this, progress::class.java)
+            val intent1 = Intent(this, progress::class.java)
             intent1.putExtra("email", email)
-            intent1.putExtra("selectedCourse" , selectedCourse)
+            intent1.putExtra("selectedCourse", course)
             startActivity(intent1)
         }
 
-        findViewById<ImageView>(R.id.nav_result).setOnClickListener {
-            val intent2=Intent(this, notification::class.java)
-            intent2.putExtra("email", email)
-            startActivity(intent2)        }
-
         findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
-            val intent3=Intent(this, profile::class.java)
+            val intent3 = Intent(this, profile::class.java)
             intent3.putExtra("email", email)
-            startActivity(intent3)        }
-        findViewById<ImageView>(R.id.nav_home).setOnClickListener {
-            val intent4=Intent(this, homepage::class.java)
-            intent4.putExtra("email", email)
-            startActivity(intent4)        }
+            startActivity(intent3)
+        }
 
-        // ✅ Define subject list based on course
+        findViewById<ImageView>(R.id.nav_home).setOnClickListener {
+            // Refresh homepage without losing user data
+            val intent4 = Intent(this, homepage::class.java)
+            startActivity(intent4)
+            finish()
+        }
+
+        // ✅ Build subject list based on course
         val subjectList = when (course) {
             "BCA" -> listOf(
                 Subject(R.drawable.c_logo, "C Programming", "BCA101"),
@@ -99,7 +108,7 @@ class homepage : AppCompatActivity() {
         items = itemAdaptor(ArrayList(subjectList), this)
         recyclerView.adapter = items
 
-        // ✅ Setup search functionality
+        // ✅ Setup search
         val searchBox = findViewById<EditText>(R.id.search_box)
         val searchBtn = findViewById<ImageView>(R.id.search)
         searchBox.visibility = View.GONE

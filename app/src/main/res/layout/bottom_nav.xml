@@ -25,6 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+
             android:contentDescription="Home"
             android:padding="10dp"
             android:src="@drawable/home_ic" />
@@ -38,15 +39,7 @@
             android:padding="10dp"
             android:src="@drawable/progress" />
 
-        <ImageView
-            android:id="@+id/nav_result"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:contentDescription="Result"
-            android:padding="10dp"
 
-            android:src="@drawable/notificationimg" />
 
         <ImageView
             android:id="@+id/nav_profile"

@@ -32,12 +32,7 @@ class progress : AppCompatActivity() {
             startActivity(intent1)
         }
 
-        findViewById<ImageView>(R.id.nav_result).setOnClickListener {
-            val intent2 = Intent(this, notification::class.java)
-            intent2.putExtra("email", email)
-            intent2.putExtra("selectedCourse", course)
-            startActivity(intent2)
-        }
+
 
         findViewById<ImageView>(R.id.nav_profile).setOnClickListener {
             val intent3 = Intent(this, profile::class.java)
