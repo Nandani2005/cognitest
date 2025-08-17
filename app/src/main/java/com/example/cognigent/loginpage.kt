@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.DBHelper
+import com.example.cognigent.common.Common
 
 class loginpage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,11 @@ class loginpage : AppCompatActivity() {
             val email = loginEmail.text.toString()
             val password = loginPassword.text.toString()
             if(email.equals("admin@gmail.com")){
+
+                Common.putString(this, "EMAIL", email)
+                Common.putString(this, "NAME", "Admin")
+
+
                 val intent = Intent(this, AddQuestionActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -56,6 +62,10 @@ class loginpage : AppCompatActivity() {
 
             else if (dbHelper.checkLogin(email, password)) {
                 val user = dbHelper.getUserNameAndCourse(email)
+
+                Common.putString(this, "EMAIL", email)
+                Common.putString(this, "NAME", user?.first.toString())
+
                 val intent = Intent(this, coursePage::class.java)
                 intent.putExtra("name", user?.first)
                 intent.putExtra("email", email)

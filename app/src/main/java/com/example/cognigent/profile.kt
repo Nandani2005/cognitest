@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.DBHelper
+import com.example.cognigent.common.Common
 
 class profile : AppCompatActivity() {
 
@@ -93,6 +94,9 @@ class profile : AppCompatActivity() {
         confirmBtn.setOnClickListener {
             popupWindow.dismiss()
             // Go to login page or close session
+
+
+            Common.clearAll(this)
             val intent = Intent(this, loginpage::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

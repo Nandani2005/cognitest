@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cognigent.common.Common
 
 class MainActivity : AppCompatActivity() {
     private lateinit var logo: ImageView
@@ -43,9 +44,30 @@ class MainActivity : AppCompatActivity() {
                 .start()
         }, 1600)
 
+
+        val name= Common.getString(this, "NAME")
+
+
+
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@MainActivity, loginpage::class.java))
-            finish()
+            if(name.isNullOrBlank()){
+                startActivity(Intent(this@MainActivity, loginpage::class.java))
+                finish()
+            }else{
+
+               val emsil= Common.getString(this, "EMAIL")
+
+
+                val intent = Intent(this, coursePage::class.java)
+                intent.putExtra("name", name)
+                intent.putExtra("email", emsil)
+                startActivity(intent)
+                finish()
+            }
+
+
         }, 2700)
+
+
     }
 }
