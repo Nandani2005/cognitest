@@ -43,7 +43,7 @@ class AddQuestionActivity : AppCompatActivity() {
             val opt4 = inputOpt4.text.toString().trim()
             val correctAns = inputCorrectAnswer.text.toString().trim()
 
-            if (examType.isNotEmpty() && question.isNotEmpty() &&
+           /* if (examType.isNotEmpty() && question.isNotEmpty() &&
                 opt1.isNotEmpty() && opt2.isNotEmpty() &&
                 opt3.isNotEmpty() && opt4.isNotEmpty() && correctAns.isNotEmpty()
             ) {
@@ -59,19 +59,10 @@ class AddQuestionActivity : AppCompatActivity() {
                 }
             } else {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
-            }
+            }*/
         }
 
-        deleteAll.setOnClickListener {
-            val dbHelper = QuestionDatabase(this)
-            val deletedRows = dbHelper.deleteQuestion(1)
 
-            if (deletedRows > 0) {
-                Toast.makeText(this, "All questions deleted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No questions to delete", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun clearFields() {

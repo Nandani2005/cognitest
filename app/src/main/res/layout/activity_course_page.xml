@@ -168,4 +168,10 @@
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/addques"
+        android:layout_width="match_parent"
+        android:text="Add Que"
+        android:layout_height="100dp"/>
+
 </LinearLayout>
